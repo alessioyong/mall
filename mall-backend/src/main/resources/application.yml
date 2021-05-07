@@ -13,4 +13,11 @@ spring:
       url: jdbc:mysql://47.112.242.184:3306/mall_admin?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
       username: root
       password: root
+  redis:
+    host: 47.112.242.184
+    port: 6379
+    password:
 
+#验证码类型 math,char
+mall:
+  captchaType: char

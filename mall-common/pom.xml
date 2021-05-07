@@ -19,6 +19,7 @@
         <poi.version>4.1.2</poi.version>
         <mybatisPlus.version>3.4.2</mybatisPlus.version>
         <lombok.version>1.18.18</lombok.version>
+        <httpcore.version>4.4.14</httpcore.version>
     </properties>
     <dependencies>
         <!-- pagehelper 分页插件 -->
@@ -61,16 +62,31 @@
             <version>${fastjson.version}</version>
         </dependency>
 
+
+        <!-- Jackson -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.2.3</version>
+        </dependency>
+        <!--mybatis-plus-->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>${mybatisPlus.version}</version>
         </dependency>
-
+        <!--lombok-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>${httpcore.version}</version>
+        </dependency>
+
     </dependencies>
 </project>

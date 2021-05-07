@@ -18,8 +18,16 @@
         <spring-cloud.version>Hoxton.SR11</spring-cloud.version>
         <mysql.version>8.0.18</mysql.version>
         <druid.version>1.2.4</druid.version>
+        <kaptcha.version>2.3.2</kaptcha.version>
     </properties>
     <dependencies>
+
+        <dependency>
+            <groupId>com.yxx.mall</groupId>
+            <artifactId>mall-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -52,8 +60,17 @@
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>${druid.version}</version>
         </dependency>
-
-
+        <!--验证码 -->
+        <dependency>
+            <groupId>com.github.penggle</groupId>
+            <artifactId>kaptcha</artifactId>
+            <version>${kaptcha.version}</version>
+        </dependency>
+        <!-- SpringBoot Boot Redis -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>
