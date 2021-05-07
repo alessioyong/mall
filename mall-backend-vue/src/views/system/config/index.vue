@@ -180,7 +180,7 @@
 </template>
 
 <script>
-import { listConfig, getConfig, delConfig, addConfig, updateConfig, exportConfig, clearCache } from "@/api/system/config";
+import { listConfig, getConfig, delConfig, addConfig, updateConfig, clearCache } from "@/api/system/config";
 
 export default {
   name: "Config",
@@ -339,16 +339,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有参数数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return exportConfig(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-        })
+      this.download('system/config/export', {
+        ...this.queryParams
+      }, `config_${new Date().getTime()}.xlsx`)
     },
     /** 清理缓存按钮操作 */
     handleClearCache() {

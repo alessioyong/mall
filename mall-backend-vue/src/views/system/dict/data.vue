@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" v-show="showSearch" :inline="true">
       <el-form-item label="字典名称" prop="dictType">
         <el-select v-model="queryParams.dictType" size="small">
           <el-option
@@ -160,7 +160,7 @@
 </template>
 
 <script>
-import { listData, getData, delData, addData, updateData, exportData } from "@/api/system/dict/data";
+import { listData, getData, delData, addData, updateData } from "@/api/system/dict/data";
 import { listType, getType } from "@/api/system/dict/type";
 
 export default {
@@ -338,16 +338,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return exportData(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-        })
+      this.download('system/dict/data/export', {
+        ...this.queryParams
+      }, `data_${new Date().getTime()}.xlsx`)
     }
   }
 };

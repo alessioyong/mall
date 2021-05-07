@@ -63,7 +63,7 @@ export default {
   },
   data() {
     return {
-      uploadFileUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
+      uploadFileUrl: process.env.VUE_APP_BASE_API + "/file/upload", // 上传的图片服务器地址
       headers: {
         Authorization: "Bearer " + getToken(),
       },
@@ -135,7 +135,7 @@ export default {
     // 上传成功回调
     handleUploadSuccess(res, file) {
       this.$message.success("上传成功");
-      this.$emit("input", res.url);
+      this.$emit("input", res.data.url);
     },
     // 删除文件
     handleDelete(index) {

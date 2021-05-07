@@ -224,7 +224,7 @@ export default {
           { required: true, message: "公告标题不能为空", trigger: "blur" }
         ],
         noticeType: [
-          { required: true, message: "公告类型不能为空", trigger: "change" }
+          { required: true, message: "公告类型不能为空", trigger: "blur" }
         ]
       }
     };

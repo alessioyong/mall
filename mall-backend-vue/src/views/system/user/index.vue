@@ -343,7 +343,7 @@
 </template>
 
 <script>
-import { listUser, getUser, delUser, addUser, updateUser, exportUser, resetUserPwd, changeUserStatus, importTemplate } from "@/api/system/user";
+import { listUser, getUser, delUser, addUser, updateUser, resetUserPwd, changeUserStatus } from "@/api/system/user";
 import { getToken } from "@/utils/auth";
 import { treeselect } from "@/api/system/dept";
 import Treeselect from "@riophae/vue-treeselect";
@@ -632,16 +632,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有用户数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return exportUser(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-        })
+      this.download('system/user/export', {
+        ...this.queryParams
+      }, `user_${new Date().getTime()}.xlsx`)
     },
     /** 导入按钮操作 */
     handleImport() {
@@ -650,9 +643,9 @@ export default {
     },
     /** 下载模板操作 */
     importTemplate() {
-      importTemplate().then(response => {
-        this.download(response.msg);
-      });
+      this.download('system/user/importTemplate', {
+        ...this.queryParams
+      }, `user_${new Date().getTime()}.xlsx`)
     },
     // 文件上传中处理
     handleFileUploadProgress(event, file, fileList) {

@@ -55,7 +55,7 @@
             size="mini"
             icon="el-icon-cloudy"
             plain
-            @click="goTarget('https://gitee.com/y_project/RuoYi-Vue')"
+            @click="goTarget('https://gitee.com/y_project/RuoYi-Cloud')"
             >访问码云</el-button
           >
           <el-button
@@ -79,11 +79,11 @@
             <h4>后端技术</h4>
             <ul>
               <li>SpringBoot</li>
-              <li>Spring Security</li>
-              <li>JWT</li>
-              <li>MyBatis</li>
-              <li>Druid</li>
-              <li>Fastjson</li>
+              <li>SpringCloud</li>
+              <li>Nacos</li>
+              <li>Sentinel</li>
+              <li>Seata</li>
+              <li>Minio</li>
               <li>...</li>
             </ul>
           </el-col>
@@ -94,7 +94,7 @@
               <li>Vuex</li>
               <li>Element-ui</li>
               <li>Axios</li>
-              <li>Sass</li>
+              <li>Echarts</li>
               <li>Quill</li>
               <li>...</li>
             </ul>
@@ -118,10 +118,10 @@
               >
             </p>
             <p>
-              <i class="el-icon-user-solid"></i> QQ群：<s>满937441</s>
-              <s>满887144332</s> <s>满180251782</s> <s>满104180207</s>
-              <a href="https://jq.qq.com/?_wv=1027&k=VvjN2nvu" target="_blank"
-                > 186866453</a
+              <i class="el-icon-user-solid"></i> QQ群：<s>满42799195</s>
+              <s>满170157040</s> <s>满130643120</s>
+              <a href="https://jq.qq.com/?_wv=1027&k=0Ck3PvTe" target="_blank">
+                225920371</a
               >
             </p>
             <p>
@@ -146,8 +146,9 @@
             <span>更新日志</span>
           </div>
           <el-collapse accordion>
-            <el-collapse-item title="v3.4.0 - 2021-02-22">
+            <el-collapse-item title="v2.5.0 - 2021-02-02">
               <ol>
+                <li>增加分布式事务seata支持</li>
                 <li>代码生成模板支持主子表</li>
                 <li>表格右侧工具栏组件支持显隐列</li>
                 <li>图片组件添加预览&移除功能</li>
@@ -157,53 +158,57 @@
                 <li>代码生成日期控件区分范围</li>
                 <li>代码生成数据库文本类型生成表单文本域</li>
                 <li>用户手机邮箱&菜单组件修改允许空字符串</li>
-                <li>升级SpringBoot到最新版本2.2.13 提升启动速度</li>
+                <li>修复header获取username中文情况下乱码</li>
+                <li>修复角色管理-编辑角色-功能权限显示异常</li>
+                <li>修正操作日志删除接口路径</li>
+                <li>修复IE11浏览器报错问题</li>
+                <li>修复sentinel流量告警前端不响应</li>
+                <li>修正侧边栏静态路由丢失问题</li>
+                <li>修复导入数据为负浮点数时丢失精度问题</li>
+                <li>修复Get请求参数特殊值无法正确的传参</li>
+                <li>更换过期的共享配置属性</li>
+                <li>添加启动执行脚本</li>
+                <li>升级element-ui到最新版本2.15.0</li>
+                <li>升级spring-boot到最新版本2.3.7</li>
+                <li>升级spring-cloud到Hoxton.SR9</li>
+                <li>升级spring-boot-alibaba到最新版2.2.5</li>
+                <li>升级spring-boot-admin到最新版2.3.1</li>
                 <li>升级druid到最新版本v1.2.4</li>
                 <li>升级fastjson到最新版1.2.75</li>
-                <li>升级element-ui到最新版本2.15.0</li>
-                <li>修复IE11浏览器报错问题</li>
-                <li>优化多级菜单之间切换无法缓存的问题</li>
-                <li>修复四级菜单无法显示问题</li>
-                <li>修正侧边栏静态路由丢失问题</li>
-                <li>修复角色管理-编辑角色-功能权限显示异常</li>
-                <li>配置文件新增redis数据库索引属性</li>
-                <li>权限工具类增加admin判断</li>
-                <li>角色非自定义权限范围清空选择值</li>
-                <li>修复导入数据为负浮点数时丢失精度问题</li>
-                <li>移除path-to-regexp正则匹配插件</li>
-                <li>修复生成树表代码异常</li>
-                <li>修改ip字段长度防止ipv6地址长度不够</li>
-                <li>防止get请求参数值为false或0等特殊值会导致无法正确的传参</li>
-                <li>登录后push添加catch防止出现检查错误</li>
                 <li>其他细节优化</li>
               </ol>
             </el-collapse-item>
-            <el-collapse-item title="v3.3.0 - 2020-12-14">
+            <el-collapse-item title="v2.4.0 - 2020-12-22">
               <ol>
-                <li>新增缓存监控功能</li>
-                <li>支持主题风格配置</li>
+                <li>增加分布式文件Minio支持</li>
+                <li>支持多数据源切换</li>
                 <li>修复多级菜单之间切换无法缓存的问题</li>
-                <li>多级菜单自动配置组件</li>
-                <li>代码生成预览支持高亮显示</li>
-                <li>支持Get请求映射Params参数</li>
+                <li>三级菜单自动配置组件</li>
+                <li>支持主题风格配置</li>
+                <li>服务之间feign调用传递用户信息</li>
                 <li>删除用户和角色解绑关联</li>
                 <li>去除用户手机邮箱部门必填验证</li>
-                <li>Excel支持注解align对齐方式</li>
-                <li>Excel支持导入Boolean型数据</li>
-                <li>优化头像样式，鼠标移入悬停遮罩</li>
+                <li>代码生成预览支持高亮显示</li>
+                <li>获取请求token方法移至权限工具类</li>
                 <li>代码生成预览提供滚动机制</li>
-                <li>代码生成删除多余的数字float类型</li>
-                <li>修正转换字符串的目标字符集属性</li>
-                <li>回显数据字典防止空值报错</li>
+                <li>权限工具类增加管理员判断</li>
                 <li>日志记录增加过滤多文件场景</li>
-                <li>修改缓存Set方法可能导致嵌套的问题</li>
-                <li>移除前端一些多余的依赖</li>
+                <li>修改用户头像预览宽高</li>
+                <li>Excel支持注解align对齐方式</li>
+                <li>项目添加robots.txt 防止系统被搜索引擎收录</li>
+                <li>移除path-to-regexp正则匹配插件</li>
+                <li>修改Set可能导致嵌套的问题</li>
+                <li>调整代码生成页列宽</li>
+                <li>回显数据字典防止空值报错</li>
+                <li>支持get请求映射params参数</li>
+                <li>登录后push添加catch防止出现检查错误</li>
                 <li>防止安全扫描YUI出现的风险提示</li>
+                <li>代码生成删除多余的数字float类型</li>
+                <li>Excel支持导入Boolean型数据</li>
+                <li>修正转换字符串的目标字符集属性</li>
+                <li>删除多余的依赖</li>
                 <li>修改node-sass为dart-sass</li>
-                <li>升级SpringBoot到最新版本2.1.18</li>
                 <li>升级poi到最新版本4.1.2</li>
-                <li>升级oshi到最新版本v5.3.6</li>
-                <li>升级bitwalker到最新版本1.21</li>
                 <li>升级axios到最新版本0.21.0</li>
                 <li>升级element-ui到最新版本2.14.1</li>
                 <li>升级vue到最新版本2.6.12</li>
@@ -236,227 +241,125 @@
                 <li>其他细节优化</li>
               </ol>
             </el-collapse-item>
-            <el-collapse-item title="v3.2.1 - 2020-11-18">
+            <el-collapse-item title="v2.3.0 - 2020-11-20">
               <ol>
-                <li>阻止任意文件下载漏洞</li>
+                <li>新增文件服务应用（支持本地、FastDFS）</li>
+                <li>优化头像样式，鼠标移入悬停遮罩</li>
+                <li>AjaxResult重写put方法，以方便链式调用</li>
                 <li>代码生成支持上传控件</li>
                 <li>新增图片上传组件</li>
+                <li>支持用户头像更新</li>
                 <li>调整默认首页</li>
-                <li>升级druid到最新版本v1.2.2</li>
-                <li>mapperLocations配置支持分隔符</li>
-                <li>权限信息调整</li>
-                <li>调整sql默认时间</li>
-                <li>解决代码生成没有bit类型的问题</li>
+                <li>角色权限验证hasRole匹配改为equals</li>
+                <li>修正数组权限为空判断</li>
+                <li>修正注释选中节点和半选节点获取</li>
                 <li>升级pagehelper到最新版1.3.0</li>
+                <li>升级fastjson到最新版1.2.74</li>
+                <li>修正定时任务执行一次权限标识</li>
+                <li>修复页签关闭所有固定标签路由不刷新问题</li>
+                <li>表单构建布局型组件新增按钮</li>
+                <li>调整日志路径到模块目录</li>
+                <li>修正菜单提示信息错误</li>
+                <li>其他细节优化</li>
               </ol>
             </el-collapse-item>
-            <el-collapse-item title="v3.2.0 - 2020-10-10">
+            <el-collapse-item title="v2.2.0 - 2020-10-10">
               <ol>
-                <li>升级springboot版本到2.1.17 提升安全性</li>
-                <li>升级oshi到最新版本v5.2.5</li>
-                <li>升级druid到最新版本v1.2.1</li>
-                <li>升级jjwt到版本0.9.1</li>
-                <li>升级fastjson到最新版1.2.74</li>
-                <li>修改sass为node-sass，避免el-icon图标乱码</li>
+                <li>移除 OAuth2 改为 Redis</li>
+                <li>升级SpringCloud到最新版本Hoxton.SR8</li>
+                <li>升级SpringCloud Alibaba到最新版本2.2.3</li>
+                <li>升级SpringBoot Admin到最新版本2.3.0</li>
+                <li>升级Fastjson到最新版1.2.73</li>
+                <li>新增在线用户会话管理</li>
+                <li>修改用户个人资料/密码同步缓存信息</li>
+                <li>修复前端通用导出方法参数传值请求方式问题</li>
+                <li>菜单新增是否缓存keep-alive</li>
+                <li>菜单&数据权限新增（展开/折叠 全选/全不选 父子联动）</li>
+                <li>Job与Gen模块增加Redis默认配置</li>
+                <li>新增表格右侧工具栏组件right-toolbar</li>
                 <li>代码生成支持同步数据库</li>
                 <li>代码生成支持富文本控件</li>
-                <li>代码生成页面时不忽略remark属性</li>
+                <li>代码生成树模板去掉多余双引号</li>
                 <li>代码生成添加select必填选项</li>
-                <li>Excel导出类型NUMERIC支持精度浮点类型</li>
-                <li>Excel导出targetAttr优化获取值，防止get方法不规范</li>
+                <li>代码生成页面时不忽略remark属性</li>
+                <li>修复代码生成下载路径错误</li>
+                <li>左侧菜单文字过长显示省略号</li>
+                <li>表格操作列间距调整</li>
                 <li>Excel注解支持自动统计数据总和</li>
                 <li>Excel注解支持设置BigDecimal精度&舍入规则</li>
-                <li>菜单&数据权限新增（展开/折叠 全选/全不选 父子联动）</li>
-                <li>允许用户分配到部门父节点</li>
-                <li>菜单新增是否缓存keep-alive</li>
-                <li>表格操作列间距调整</li>
+                <li>导入Excel整形值校验优化</li>
+                <li>导出Excel类型NUMERIC支持精度浮点类型</li>
+                <li>导出Excel调整targetAttr获取值方法，防止get方法不规范</li>
+                <li>Token续期调整为后端刷新</li>
+                <li>Token设置默认有效期时长12小时</li>
+                <li>网关白名单放入nacos配置&支持模糊匹配</li>
+                <li>修复富文本工具栏样式不对齐问题</li>
+                <li>Editor组件优化，支持自定义高度&图片冲突问题</li>
+                <li>
+                  修复富文本空格和缩进保存后不生效问题&删除重复的placeholder
+                </li>
                 <li>限制系统内置参数不允许删除</li>
-                <li>富文本组件优化，支持自定义高度&图片冲突问题</li>
-                <li>富文本工具栏样式对齐</li>
-                <li>导入excel整形值校验优化</li>
-                <li>修复页签关闭所有时固定标签路由不刷新问题</li>
-                <li>表单构建布局型组件新增按钮</li>
-                <li>左侧菜单文字过长显示省略号</li>
-                <li>修正根节点为子部门时，树状结构显示问题</li>
                 <li>修正调用目标字符串最大长度</li>
-                <li>修正菜单提示信息错误</li>
-                <li>修正定时任务执行一次权限标识</li>
-                <li>修正数据库字符串类型nvarchar</li>
-                <li>优化递归子节点</li>
-                <li>优化数据权限判断</li>
+                <li>修改自定义权限实现</li>
+                <li>优化递归菜单&部门子节点</li>
+                <li>修改sass为node-sass，避免el-icon图标乱码</li>
+                <li>修复根节点为子部门时，树状结构显示问题</li>
+                <li>全局异常状态汉化拦截处理</li>
+                <li>唯一限制条件只返回单条数据</li>
                 <li>其他细节优化</li>
               </ol>
             </el-collapse-item>
 
-            <el-collapse-item title="v3.1.0 - 2020-08-13">
+            <el-collapse-item title="v2.1.0 - 2020-08-02">
               <ol>
-                <li>表格工具栏右侧添加刷新&显隐查询组件</li>
-                <li>后端支持CORS跨域请求</li>
+                <li>表格工具栏右侧添加刷新&显隐查询栏</li>
+                <li>OAuth自动刷新续签Token</li>
+                <li>网关支持黑名单配置</li>
+                <li>权限配置自动注册</li>
+                <li>Feign配置自动注册</li>
                 <li>代码生成支持选择上级菜单</li>
-                <li>代码生成支持自定义路径</li>
                 <li>代码生成支持复选框</li>
-                <li>Excel导出导入支持dictType字典类型</li>
-                <li>Excel支持分割字符串组内容</li>
+                <li>代码生成支持自定义路径</li>
                 <li>验证码类型支持（数组计算、字符验证）</li>
+                <li>Excel支持sort导出排序</li>
+                <li>Excel支持分割字符串组内容</li>
+                <li>excel 导入数字不需要格式化 ，导入允许列和属性个数不一致</li>
+                <li>新增菜单默认主类目</li>
                 <li>升级vue-cli版本到4.4.4</li>
                 <li>修改 node-sass 为 dart-sass</li>
-                <li>表单类型为Integer/Long设置整形默认值</li>
-                <li>代码生成器默认mapper路径与默认mapperScan路径不一致</li>
-                <li>优化防重复提交拦截器</li>
-                <li>优化上级菜单不能选择自己</li>
-                <li>修复角色的权限分配后，未实时生效问题</li>
-                <li>修复在线用户日志记录类型</li>
-                <li>修复富文本空格和缩进保存后不生效问题</li>
-                <li>修复在线用户判断逻辑</li>
-                <li>唯一限制条件只返回单条数据</li>
-                <li>添加获取当前的环境配置方法</li>
-                <li>超时登录后页面跳转到首页</li>
-                <li>全局异常状态汉化拦截处理</li>
-                <li>HTML过滤器改为将html转义</li>
-                <li>检查字符支持小数点&降级改成异常提醒</li>
-                <li>其他细节优化</li>
-              </ol>
-            </el-collapse-item>
-
-            <el-collapse-item title="v3.0.0 - 2020-07-20">
-              <ol>
-                <li>单应用调整为多模块项目</li>
                 <li>升级element-ui版本到2.13.2</li>
-                <li>删除babel，提高编译速度。</li>
-                <li>新增菜单默认主类目</li>
-                <li>编码文件名修改为uuid方式</li>
-                <li>定时任务cron表达式验证</li>
-                <li>角色权限修改时已有权限未自动勾选异常修复</li>
-                <li>防止切换权限用户后登录出现404</li>
-                <li>Excel支持sort导出排序</li>
-                <li>创建用户不允许选择超级管理员角色</li>
-                <li>修复代码生成导入表结构出现异常页面不提醒问题</li>
-                <li>修复代码生成点击多次表修改数据不变化的问题</li>
+                <li>删除babel，提高编译速度</li>
+                <li>修复验证码异常时network面板的中文会出现乱码问题</li>
+                <li>修复 utils/index.js 中不包含 parseTime 函数的 bug</li>
+                <li>优化selectDictLabel方法，数组迭代器换为some</li>
+                <li>修复客户端模式认证会出现错误</li>
+                <li>检查字符支持小数点&降级改成异常提醒</li>
+                <li>定时任务添加cron表达式验证</li>
+                <li>代码生成查询条件修正</li>
+                <li>修正角色管理导出权限权限字符</li>
+                <li>修正防止切换权限用户后登录出现404</li>
+                <li>终端设置安全码加密&更新缓存</li>
                 <li>修复头像上传成功二次打开无法改变裁剪框大小和位置问题</li>
                 <li>修复布局为small者mini用户表单显示错位问题</li>
-                <li>修复热部署导致的强换异常问题</li>
+                <li>修复代码生成点击多次表修改数据不变化的问题</li>
+                <li>修复代码生成导入表结构出现异常页面不提醒问题</li>
+                <li>修复角色权限修改时已有权限未自动勾选异常</li>
+                <li>创建用户不允许选择系统管理员角色</li>
+                <li>添加全局异常处理（网关异常&业务异常）</li>
+                <li>修复终端查询Enter键搜索时是刷新页面而不是查询列表</li>
+                <li>删除job重复表单参数</li>
+                <li>代码生成浮点型改用BigDecimal</li>
+                <li>表单类型为Integer/Long设置整形默认值</li>
                 <li>修改用户管理复选框宽度，防止部分浏览器出现省略号</li>
-                <li>IpUtils工具，清除Xss特殊字符，防止Xff注入攻击</li>
-                <li>生成domain 如果是浮点型 统一用BigDecimal</li>
-                <li>定时任务调整label-width，防止部署出现错位</li>
-                <li>调整表头固定列默认样式</li>
-                <li>代码生成模板调整，字段为String并且必填则加空串条件</li>
-                <li>代码生成字典Integer/Long使用parseInt</li>
                 <li>
-                  修复dict_sort不可update为0的问题&查询返回增加dict_sort升序排序
+                  RedisCache中所有方法参数添加final，并优化list取出效率，添加其它常用redis方法
                 </li>
-                <li>修正岗位导出权限注解</li>
-                <li>禁止加密密文返回前端</li>
-                <li>修复代码生成页面中的查询条件创建时间未生效的问题</li>
-                <li>修复首页搜索菜单外链无法点击跳转问题</li>
-                <li>修复菜单管理选择图标，backspace删除时不过滤数据</li>
-                <li>用户管理部门分支节点不可检查&显示计数</li>
-                <li>数据范围过滤属性调整</li>
-                <li>其他细节优化</li>
-              </ol>
-            </el-collapse-item>
-
-            <el-collapse-item title="v2.3.0 - 2020-06-01">
-              <ol>
-                <li>升级fastjson到最新版1.2.70 修复高危安全漏洞</li>
-                <li>dev启动默认打开浏览器</li>
-                <li>vue-cli使用默认source-map</li>
-                <li>slidebar eslint报错优化</li>
-                <li>当tags-view滚动关闭右键菜单</li>
-                <li>字典管理添加缓存读取</li>
-                <li>参数管理支持缓存操作</li>
-                <li>支持一级菜单（和主页同级）在main区域显示</li>
-                <li>限制外链地址必须以http(s)开头</li>
-                <li>tagview & sidebar 主题颜色与element ui(全局)同步</li>
-                <li>修改数据源类型优先级，先根据方法，再根据类</li>
-                <li>支持是否需要设置token属性，自定义返回码消息。</li>
-                <li>swagger请求前缀加入配置。</li>
-                <li>登录地点设置内容过长则隐藏显示</li>
-                <li>修复定时任务执行一次按钮后不提示消息问题</li>
-                <li>修改上级部门（选择项排除本身和下级）</li>
-                <li>通用http发送方法增加参数 contentType 编码类型</li>
-                <li>更换IP地址查询接口</li>
-                <li>修复页签变量undefined</li>
-                <li>添加校验部门包含未停用的子部门</li>
-                <li>修改定时任务详情下次执行时间日期显示错误</li>
-                <li>角色管理查询设置默认排序字段</li>
-                <li>swagger添加enable参数控制是否启用</li>
-                <li>只对json类型请求构建可重复读取inputStream的request</li>
-                <li>修改代码生成字典字段int类型没有自动选中问题</li>
-                <li>vuex用户名取值修正</li>
-                <li>表格树模板去掉多余的)</li>
-                <li>代码生成序号修正</li>
-                <li>全屏情况下不调整上外边距</li>
-                <li>代码生成Date字段添加默认格式</li>
-                <li>用户管理角色选择权限控制</li>
-                <li>修复路由懒加载报错问题</li>
-                <li>模板sql.vm添加菜单状态</li>
-                <li>设置用户名称不能修改</li>
-                <li>dialog添加append-to-body属性，防止ie遮罩</li>
-                <li>菜单区分状态和显示隐藏功能</li>
-                <li>升级fastjson到最新版1.2.68 修复安全加固</li>
-                <li>修复代码生成如果选择字典类型缺失逗号问题</li>
-                <li>登录请求params更换为data，防止暴露url</li>
-                <li>日志返回时间格式处理</li>
-                <li>添加handle控制允许拖动的元素</li>
-                <li>布局设置点击扩大范围</li>
-                <li>代码生成列属性排序查询</li>
-                <li>代码生成列支持拖动排序</li>
-                <li>修复时间格式不支持ios问题</li>
-                <li>表单构建添加父级class，防止冲突</li>
-                <li>定时任务并发属性修正</li>
-                <li>角色禁用&菜单隐藏不查询权限</li>
-                <li>其他细节优化</li>
-              </ol>
-            </el-collapse-item>
-
-            <el-collapse-item title="v2.2.0 - 2020-03-18">
-              <ol>
-                <li>系统监控新增定时任务功能</li>
-                <li>添加一个打包Web工程bat</li>
-                <li>修复页签鼠标滚轮按下的时候，可以关闭不可关闭的tag</li>
-                <li>修复点击退出登录有时会无提示问题</li>
-                <li>修复防重复提交注解无效问题</li>
-                <li>修复通知公告批量删除异常问题</li>
-                <li>添加菜单时路由地址必填限制</li>
-                <li>代码生成字段描述可编辑</li>
-                <li>修复用户修改个人信息导致缓存不过期问题</li>
-                <li>个人信息创建时间获取正确属性值</li>
-                <li>操作日志详细显示正确类型</li>
-                <li>导入表单击行数据时选中对应的复选框</li>
-                <li>批量替换表前缀逻辑调整</li>
-                <li>固定重定向路径表达式</li>
-                <li>升级element-ui版本到2.13.0</li>
-                <li>操作日志排序调整</li>
-                <li>修复charts切换侧边栏或者缩放窗口显示bug</li>
-                <li>其他细节优化</li>
-              </ol>
-            </el-collapse-item>
-
-            <el-collapse-item title="v2.1.0 - 2020-02-24">
-              <ol>
-                <li>新增表单构建</li>
-                <li>代码生成支持树表结构</li>
-                <li>新增用户导入</li>
-                <li>修复动态加载路由页面刷新问题</li>
-                <li>修复地址开关无效问题</li>
-                <li>汉化错误提示页面</li>
-                <li>代码生成已知问题修改</li>
-                <li>修复多数据源下配置关闭出现异常处理</li>
-                <li>添加HTML过滤器，用于去除XSS漏洞隐患</li>
-                <li>修复上传头像控制台出现异常</li>
-                <li>修改用户管理分页不正确的问题</li>
-                <li>修复验证码记录提示错误</li>
-                <li>修复request.js缺少Message引用</li>
-                <li>修复表格时间为空出现的异常</li>
-                <li>添加Jackson日期反序列化时区配置</li>
-                <li>调整根据用户权限加载菜单数据树形结构</li>
-                <li>调整成功登陆不恢复按钮，防止多次点击</li>
-                <li>修改用户个人资料同步缓存信息</li>
-                <li>修复页面同时出现el-upload和Editor不显示处理</li>
-                <li>修复在角色管理页修改菜单权限偶尔未选中问题</li>
-                <li>配置文件新增redis密码属性</li>
-                <li>设置mybatis全局的配置文件</li>
+                <li>修正定时任务日志权限字符</li>
+                <li>添加Jackson时区配置</li>
+                <li>代码生成相关问题修复</li>
+                <li>自定义oauth2返回异常信息</li>
+                <li>升级nacos到最新版1.3.0 全新内核构建</li>
+                <li>修正【代码生成】功能无法下载的问题</li>
                 <li>其他细节优化</li>
               </ol>
             </el-collapse-item>
@@ -475,24 +378,45 @@
                 <li>其他细节优化</li>
               </ol>
             </el-collapse-item>
-            <el-collapse-item title="v1.1.0 - 2019-11-11">
+            <el-collapse-item title="v2.0.0 - 2020-06-10">
               <ol>
-                <li>新增在线用户管理</li>
-                <li>新增按钮组功能实现（批量删除、导出、清空）</li>
-                <li>新增查询条件重置按钮</li>
-                <li>新增Swagger全局Token配置</li>
-                <li>新增后端参数校验</li>
-                <li>修复字典管理页面的日期查询异常</li>
-                <li>修改时间函数命名防止冲突</li>
-                <li>去除菜单上级校验，默认为顶级</li>
-                <li>修复用户密码无法修改问题</li>
-                <li>修复菜单类型为按钮时不显示权限标识</li>
+                <li>使用Sentinel代替Hystrix</li>
+                <li>菜单新增终端管理配置</li>
+                <li>菜单新增Nacos&Sentinel控制台</li>
+                <li>代码生成适配Cloud</li>
+                <li>记录登录退出日志信息</li>
+                <li>网关验证码过滤器添加放行校验</li>
+                <li>个性化的定制自动加载类</li>
+                <li>定时任务调整label-width，防止部署出现错位</li>
+                <li>调整表头固定列默认样式</li>
+                <li>代码生成模板调整，字段为String并且必填则加空串条件</li>
+                <li>代码生成字典Integer/Long使用parseInt</li>
+                <li>修复退出登录重定向到登录页，登录后参数丢失。</li>
+                <li>修正岗位导出权限注解</li>
+                <li>修复首页搜索菜单外链无法点击跳转问题</li>
+                <li>修复菜单管理选择图标，backspace删除时不过滤数据</li>
+                <li>用户管理部门分支节点不可检查&显示计数</li>
+                <li>数据范围过滤属性调整</li>
+                <li>字典管理添加缓存读取</li>
+                <li>参数管理支持缓存操作</li>
+                <li>升级fastjson到最新版1.2.70 修复高危安全漏洞</li>
+                <li>dev启动默认打开浏览器</li>
+                <li>使用vue-cli默认source-map</li>
+                <li>slidebar eslint报错优化</li>
+                <li>当tags-view滚动关闭右键菜单</li>
+                <li>支持一级菜单（和主页同级）在main区域显示</li>
+                <li>限制外链地址必须以http(s)😕/开头</li>
+                <li>tagview & sidebar 主题颜色与element ui(全局)同步</li>
+                <li>
+                  修复dict_sort不可update为0的问题&查询返回增加dict_sort升序排序
+                </li>
+                <li>权限部分代码调整</li>
                 <li>其他细节优化</li>
               </ol>
             </el-collapse-item>
-            <el-collapse-item title="v1.0.0 - 2019-10-08">
+            <el-collapse-item title="v1.0.0 - 2020-05-20">
               <ol>
-                <li>若依前后端分离系统正式发布</li>
+                <li>若依微服务系统正式发布</li>
               </ol>
             </el-collapse-item>
           </el-collapse>
@@ -525,7 +449,7 @@ export default {
   data() {
     return {
       // 版本号
-      version: "3.4.0",
+      version: "2.5.0",
     };
   },
   methods: {

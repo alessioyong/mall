@@ -1,4 +1,4 @@
-package com.yxx.mall.backend.congigure;
+package com.yxx.mall.backend.configure;
 
 import com.google.code.kaptcha.text.impl.DefaultTextCreator;
 

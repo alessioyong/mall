@@ -80,7 +80,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['monitor:operlog:remove']"
+          v-hasPermi="['system:operlog:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -90,7 +90,7 @@
           icon="el-icon-delete"
           size="mini"
           @click="handleClean"
-          v-hasPermi="['monitor:operlog:remove']"
+          v-hasPermi="['system:operlog:remove']"
         >清空</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -100,7 +100,7 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['monitor:operlog:export']"
+          v-hasPermi="['system:config:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -114,7 +114,6 @@
       <el-table-column label="请求方式" align="center" prop="requestMethod" />
       <el-table-column label="操作人员" align="center" prop="operName" />
       <el-table-column label="主机" align="center" prop="operIp" width="130" :show-overflow-tooltip="true" />
-      <el-table-column label="操作地点" align="center" prop="operLocation" :show-overflow-tooltip="true" />
       <el-table-column label="操作状态" align="center" prop="status" :formatter="statusFormat" />
       <el-table-column label="操作日期" align="center" prop="operTime" width="180">
         <template slot-scope="scope">
@@ -128,7 +127,7 @@
             type="text"
             icon="el-icon-view"
             @click="handleView(scope.row,scope.index)"
-            v-hasPermi="['monitor:operlog:query']"
+            v-hasPermi="['system:operlog:query']"
           >详细</el-button>
         </template>
       </el-table-column>
@@ -150,7 +149,7 @@
             <el-form-item label="操作模块：">{{ form.title }} / {{ typeFormat(form) }}</el-form-item>
             <el-form-item
               label="登录信息："
-            >{{ form.operName }} / {{ form.operIp }} / {{ form.operLocation }}</el-form-item>
+            >{{ form.operName }} / {{ form.operIp }}</el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="请求地址：">{{ form.operUrl }}</el-form-item>
@@ -187,7 +186,7 @@
 </template>
 
 <script>
-import { list, delOperlog, cleanOperlog, exportOperlog } from "@/api/monitor/operlog";
+import { list, delOperlog, cleanOperlog } from "@/api/system/operlog";
 
 export default {
   name: "Operlog",
@@ -304,16 +303,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有操作日志数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return exportOperlog(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-        })
+      this.download('system/operlog/export', {
+        ...this.queryParams
+      }, `operlog_${new Date().getTime()}.xlsx`)
     }
   }
 };

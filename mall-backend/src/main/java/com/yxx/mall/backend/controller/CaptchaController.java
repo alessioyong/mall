@@ -42,7 +42,7 @@ public class CaptchaController {
     @Value("${mall.captchaType}")
     private String captchaType;
 
-    @GetMapping("/captchaImage")
+    @GetMapping("/code")
     public R getCode(HttpServletResponse response) throws IOException {
 
         //验证码信息

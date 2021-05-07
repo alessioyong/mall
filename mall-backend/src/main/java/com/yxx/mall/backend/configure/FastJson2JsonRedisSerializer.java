@@ -1,4 +1,4 @@
-package com.yxx.mall.backend.congigure;
+package com.yxx.mall.backend.configure;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.ParserConfig;

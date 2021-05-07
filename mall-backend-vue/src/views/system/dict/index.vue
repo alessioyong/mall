@@ -188,7 +188,7 @@
 </template>
 
 <script>
-import { listType, getType, delType, addType, updateType, exportType, clearCache } from "@/api/system/dict/type";
+import { listType, getType, delType, addType, updateType, clearCache } from "@/api/system/dict/type";
 
 export default {
   name: "Dict",
@@ -343,16 +343,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有类型数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return exportType(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-        })
+      this.download('system/dict/type/export', {
+        ...this.queryParams
+      }, `type_${new Date().getTime()}.xlsx`)
     },
     /** 清理缓存按钮操作 */
     handleClearCache() {

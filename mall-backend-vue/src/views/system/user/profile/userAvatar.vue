@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="user-info-head" @click="editCropper()"><img v-bind:src="options.img" title="点击上传头像" class="img-circle img-lg" /></div>
-    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body @opened="modalOpened">
+    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body @opened="modalOpened"  @close="closeDialog()">
       <el-row>
         <el-col :xs="24" :md="12" :style="{height: '350px'}">
           <vue-cropper
@@ -126,7 +126,7 @@ export default {
         formData.append("avatarfile", data);
         uploadAvatar(formData).then(response => {
           this.open = false;
-          this.options.img = process.env.VUE_APP_BASE_API + response.imgUrl;
+          this.options.img = response.imgUrl;
           store.commit('SET_AVATAR', this.options.img);
           this.msgSuccess("修改成功");
           this.visible = false;
@@ -136,6 +136,11 @@ export default {
     // 实时预览
     realTime(data) {
       this.previews = data;
+    },
+    // 关闭窗口
+    closeDialog() {
+      this.options.img = store.getters.avatar
+	  this.visible = false;
     }
   }
 };
