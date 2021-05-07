@@ -1,0 +1,16 @@
+#端口号
+server:
+  port: 8801
+#模块名称
+spring:
+  application:
+    name: mall-backend
+#数据库链接
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://47.112.242.184:3306/mall_admin?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+      username: root
+      password: root
+

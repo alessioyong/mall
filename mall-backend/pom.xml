@@ -16,6 +16,8 @@
     <properties>
         <java.version>1.8</java.version>
         <spring-cloud.version>Hoxton.SR11</spring-cloud.version>
+        <mysql.version>8.0.18</mysql.version>
+        <druid.version>1.2.4</druid.version>
     </properties>
     <dependencies>
         <dependency>
@@ -38,6 +40,20 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!--mysql-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.version}</version>
+        </dependency>
+        <!--druid数据库连接池-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>${druid.version}</version>
+        </dependency>
+
+
     </dependencies>
     <dependencyManagement>
         <dependencies>

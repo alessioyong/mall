@@ -15,5 +15,6 @@
         <module>mall-ware</module>
         <module>mall-product</module>
         <module>mall-backend</module>
+        <module>mall-common</module>
     </modules>
 </project>
