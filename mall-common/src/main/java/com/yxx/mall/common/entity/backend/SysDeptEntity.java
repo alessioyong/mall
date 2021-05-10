@@ -8,38 +8,58 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 通知公告表
+ * 部门表
  * 
  * @author xyong
  * @email ${email}
  * @date 2021-05-10 16:01:11
  */
 @Data
-@TableName("sys_notice")
-public class SysNoticeEntity implements Serializable {
+@TableName("sys_dept")
+public class SysDeptEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 公告ID
+	 * 部门id
 	 */
 	@TableId
-	private Integer noticeId;
+	private Long deptId;
 	/**
-	 * 公告标题
+	 * 父部门id
 	 */
-	private String noticeTitle;
+	private Long parentId;
 	/**
-	 * 公告类型（1通知 2公告）
+	 * 祖级列表
 	 */
-	private String noticeType;
+	private String ancestors;
 	/**
-	 * 公告内容
+	 * 部门名称
 	 */
-	private byte noticeContent;
+	private String deptName;
 	/**
-	 * 公告状态（0正常 1关闭）
+	 * 显示顺序
+	 */
+	private Integer orderNum;
+	/**
+	 * 负责人
+	 */
+	private String leader;
+	/**
+	 * 联系电话
+	 */
+	private String phone;
+	/**
+	 * 邮箱
+	 */
+	private String email;
+	/**
+	 * 部门状态（0正常 1停用）
 	 */
 	private String status;
+	/**
+	 * 删除标志（0代表存在 2代表删除）
+	 */
+	private String delFlag;
 	/**
 	 * 创建者
 	 */
@@ -56,9 +76,5 @@ public class SysNoticeEntity implements Serializable {
 	 * 更新时间
 	 */
 	private Date updateTime;
-	/**
-	 * 备注
-	 */
-	private String remark;
 
 }

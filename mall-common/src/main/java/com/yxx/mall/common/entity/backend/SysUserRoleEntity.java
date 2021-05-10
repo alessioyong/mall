@@ -7,15 +7,15 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * 用户与岗位关联表
+ * 用户和角色关联表
  * 
  * @author xyong
  * @email ${email}
  * @date 2021-05-10 16:01:11
  */
 @Data
-@TableName("sys_user_post")
-public class SysUserPostEntity implements Serializable {
+@TableName("sys_user_role")
+public class SysUserRoleEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -24,8 +24,8 @@ public class SysUserPostEntity implements Serializable {
 	@TableId
 	private Long userId;
 	/**
-	 * 岗位ID
+	 * 角色ID
 	 */
-	private Long postId;
+	private Long roleId;
 
 }

@@ -8,49 +8,57 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 定时任务调度日志表
+ * 岗位信息表
  * 
  * @author xyong
  * @email ${email}
  * @date 2021-05-10 16:01:11
  */
 @Data
-@TableName("sys_job_log")
-public class SysJobLogEntity implements Serializable {
+@TableName("sys_post")
+public class SysPostEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 任务日志ID
+	 * 岗位ID
 	 */
 	@TableId
-	private Long jobLogId;
+	private Long postId;
 	/**
-	 * 任务名称
+	 * 岗位编码
 	 */
-	private String jobName;
+	private String postCode;
 	/**
-	 * 任务组名
+	 * 岗位名称
 	 */
-	private String jobGroup;
+	private String postName;
 	/**
-	 * 调用目标字符串
+	 * 显示顺序
 	 */
-	private String invokeTarget;
+	private Integer postSort;
 	/**
-	 * 日志信息
-	 */
-	private String jobMessage;
-	/**
-	 * 执行状态（0正常 1失败）
+	 * 状态（0正常 1停用）
 	 */
 	private String status;
 	/**
-	 * 异常信息
+	 * 创建者
 	 */
-	private String exceptionInfo;
+	private String createBy;
 	/**
 	 * 创建时间
 	 */
 	private Date createTime;
+	/**
+	 * 更新者
+	 */
+	private String updateBy;
+	/**
+	 * 更新时间
+	 */
+	private Date updateTime;
+	/**
+	 * 备注
+	 */
+	private String remark;
 
 }

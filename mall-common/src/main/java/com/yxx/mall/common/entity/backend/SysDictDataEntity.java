@@ -11,7 +11,8 @@ import java.util.Date;
  * 字典数据表
  * 
  * @author xyong
- * @date 2021-05-07 10:42:49
+ * @email ${email}
+ * @date 2021-05-10 16:01:10
  */
 @Data
 @TableName("sys_dict_data")

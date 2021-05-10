@@ -11,7 +11,8 @@ import java.util.Date;
  * 定时任务调度表
  * 
  * @author xyong
- * @date 2021-05-07 10:42:50
+ * @email ${email}
+ * @date 2021-05-10 16:01:10
  */
 @Data
 @TableName("sys_job")

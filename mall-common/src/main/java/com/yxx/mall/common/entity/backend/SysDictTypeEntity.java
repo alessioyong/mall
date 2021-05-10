@@ -8,38 +8,34 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 参数配置表
+ * 字典类型表
  * 
  * @author xyong
  * @email ${email}
- * @date 2021-05-10 16:01:10
+ * @date 2021-05-10 16:01:11
  */
 @Data
-@TableName("sys_config")
-public class SysConfigEntity implements Serializable {
+@TableName("sys_dict_type")
+public class SysDictTypeEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 参数主键
+	 * 字典主键
 	 */
 	@TableId
-	private Integer configId;
+	private Long dictId;
 	/**
-	 * 参数名称
+	 * 字典名称
 	 */
-	private String configName;
+	private String dictName;
 	/**
-	 * 参数键名
+	 * 字典类型
 	 */
-	private String configKey;
+	private String dictType;
 	/**
-	 * 参数键值
+	 * 状态（0正常 1停用）
 	 */
-	private String configValue;
-	/**
-	 * 系统内置（Y是 N否）
-	 */
-	private String configType;
+	private String status;
 	/**
 	 * 创建者
 	 */
