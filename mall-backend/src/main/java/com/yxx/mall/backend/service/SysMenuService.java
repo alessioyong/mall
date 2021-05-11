@@ -43,4 +43,11 @@ public interface SysMenuService {
      * @return
      */
     SysMenuEntity selectMenuById(Long menuId);
+
+    /**
+     * 添加菜单
+     * @param menu
+     * @return
+     */
+    int insertMenu(SysMenuEntity menu);
 }

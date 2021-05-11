@@ -1,12 +1,13 @@
 package com.yxx.mall.backend.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yxx.mall.common.entity.backend.SysMenuEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
 @Mapper
-public interface SysMenuMapper {
+public interface SysMenuMapper extends BaseMapper<SysMenuEntity> {
 
     /**
      * 根据用户ID查询权限
@@ -49,4 +50,19 @@ public interface SysMenuMapper {
      * @return
      */
     SysMenuEntity selectMenuById(Long menuId);
+
+    /**
+     * 校验菜单名称是否唯一
+     * @param menuName
+     * @param parentId
+     * @return
+     */
+    SysMenuEntity checkMenuNameUnique(String menuName, Long parentId);
+
+    /**
+     * 新增保存菜单信息
+     * @param menu
+     * @return
+     */
+    int insertMenu(SysMenuEntity menu);
 }

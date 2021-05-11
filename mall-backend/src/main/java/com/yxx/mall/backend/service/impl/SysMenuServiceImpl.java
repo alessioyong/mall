@@ -5,7 +5,9 @@ import com.yxx.mall.backend.model.MetaVo;
 import com.yxx.mall.backend.model.RouterVo;
 import com.yxx.mall.backend.service.SysMenuService;
 import com.yxx.mall.common.entity.backend.SysMenuEntity;
+import com.yxx.mall.common.utils.RRException;
 import com.yxx.mall.common.utils.StringUtils;
+import com.yxx.mall.common.utils.constant.Constants;
 import com.yxx.mall.common.utils.constant.UserConstants;
 import com.yxx.mall.common.utils.security.SecurityUtils;
 import org.springframework.stereotype.Service;
@@ -113,6 +115,43 @@ public class SysMenuServiceImpl implements SysMenuService {
     public SysMenuEntity selectMenuById(Long menuId) {
         return menuMapper.selectMenuById(menuId);
     }
+
+    /**
+     * 添加菜单
+     * @param menu
+     * @return
+     */
+    @Override
+    public int insertMenu(SysMenuEntity menu) {
+        if(UserConstants.NOT_UNIQUE.equals(checkMenuNameUnique(menu))){
+            throw new RRException("新增菜单'" + menu.getMenuName() + "'失败，菜单名称已存在");
+        }else if (UserConstants.YES_FRAME.equals(menu.getIsFrame())
+                && !StringUtils.startsWithAny(menu.getPath(), Constants.HTTP, Constants.HTTPS))
+        {
+            throw new RRException("新增菜单'" + menu.getMenuName() + "'失败，地址必须以http(s)://开头");
+        }
+        menu.setCreateBy(SecurityUtils.getUsername());
+        return menuMapper.insert(menu);
+    }
+
+    /**
+     * 校验菜单名称是否唯一
+     *
+     * @param menu 菜单信息
+     * @return 结果
+     */
+    public String checkMenuNameUnique(SysMenuEntity menu)
+    {
+        Long menuId = StringUtils.isNull(menu.getMenuId()) ? -1L : menu.getMenuId();
+        SysMenuEntity info = menuMapper.checkMenuNameUnique(menu.getMenuName(), menu.getParentId());
+        if (StringUtils.isNotNull(info) && info.getMenuId().longValue() != menuId.longValue())
+        {
+            return UserConstants.NOT_UNIQUE;
+        }
+        return UserConstants.UNIQUE;
+    }
+
+
 
     /**
      * 获取组件信息

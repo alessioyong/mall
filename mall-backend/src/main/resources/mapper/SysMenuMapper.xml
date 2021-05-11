@@ -28,6 +28,44 @@
         select menu_id, menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, ifnull(perms,'') as perms, icon, create_time
 		from sys_menu
     </sql>
+    <insert id="insertMenu">
+        insert into sys_menu(
+        <if test="menuId != null and menuId != 0">menu_id,</if>
+        <if test="parentId != null and parentId != 0">parent_id,</if>
+        <if test="menuName != null and menuName != ''">menu_name,</if>
+        <if test="orderNum != null and orderNum != ''">order_num,</if>
+        <if test="path != null and path != ''">path,</if>
+        <if test="component != null and component != ''">component,</if>
+        <if test="isFrame != null and isFrame != ''">is_frame,</if>
+        <if test="isCache != null and isCache != ''">is_cache,</if>
+        <if test="menuType != null and menuType != ''">menu_type,</if>
+        <if test="visible != null">visible,</if>
+        <if test="status != null">status,</if>
+        <if test="perms !=null and perms != ''">perms,</if>
+        <if test="icon != null and icon != ''">icon,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
+        )values(
+        <if test="menuId != null and menuId != 0">#{menuId},</if>
+        <if test="parentId != null and parentId != 0">#{parentId},</if>
+        <if test="menuName != null and menuName != ''">#{menuName},</if>
+        <if test="orderNum != null and orderNum != ''">#{orderNum},</if>
+        <if test="path != null and path != ''">#{path},</if>
+        <if test="component != null and component != ''">#{component},</if>
+        <if test="isFrame != null and isFrame != ''">#{isFrame},</if>
+        <if test="isCache != null and isCache != ''">#{isCache},</if>
+        <if test="menuType != null and menuType != ''">#{menuType},</if>
+        <if test="visible != null">#{visible},</if>
+        <if test="status != null">#{status},</if>
+        <if test="perms !=null and perms != ''">#{perms},</if>
+        <if test="icon != null and icon != ''">#{icon},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        sysdate()
+        )
+    </insert>
+
     <select id="selectMenuPermsByUserId" parameterType="Long" resultType="String">
 		select distinct m.perms
 		from sys_menu m
@@ -87,5 +125,9 @@
     <select id="selectMenuById" resultType="com.yxx.mall.common.entity.backend.SysMenuEntity">
         <include refid="selectMenuVo"/>
         where menu_id = #{menuId}
+    </select>
+    <select id="checkMenuNameUnique" resultType="com.yxx.mall.common.entity.backend.SysMenuEntity">
+        <include refid="selectMenuVo"/>
+        where menu_name=#{menuName} and parent_id = #{parentId} limit 1
     </select>
 </mapper>

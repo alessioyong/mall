@@ -6,10 +6,8 @@ import com.yxx.mall.common.entity.backend.SysMenuEntity;
 import com.yxx.mall.common.utils.R;
 import com.yxx.mall.common.utils.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,6 +33,13 @@ public class SysMenuController {
         List<SysMenuEntity> menus=menuService.selectMenuList(menu,userId);
         return R.ok().put("data",menus);
     }
+
+    @PostMapping("/add")
+    public R add(@Validated @RequestBody SysMenuEntity menu){
+        int flag=menuService.insertMenu(menu);
+        return flag>0?R.ok():R.error();
+    }
+
     /**
      * 根据菜单编号获取详细信息
      */

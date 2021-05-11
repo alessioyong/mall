@@ -1,5 +1,6 @@
 package com.yxx.mall.common.entity.backend;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -100,7 +101,9 @@ public class SysMenuEntity implements Serializable {
 	private String remark;
 
 	/** 子菜单 */
+	@TableField(exist = false)
 	private List<SysMenuEntity> children = new ArrayList<>();
 	/** 请求参数 */
+	@TableField(exist = false)
 	private Map<String, Object> params;
 }
