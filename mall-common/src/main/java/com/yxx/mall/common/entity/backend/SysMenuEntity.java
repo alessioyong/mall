@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 菜单权限表
@@ -47,11 +49,11 @@ public class SysMenuEntity implements Serializable {
 	/**
 	 * 是否为外链（0是 1否）
 	 */
-	private Integer isFrame;
+	private String isFrame;
 	/**
 	 * 是否缓存（0缓存 1不缓存）
 	 */
-	private Integer isCache;
+	private String isCache;
 	/**
 	 * 菜单类型（M目录 C菜单 F按钮）
 	 */
@@ -93,4 +95,6 @@ public class SysMenuEntity implements Serializable {
 	 */
 	private String remark;
 
+	/** 子菜单 */
+	private List<SysMenuEntity> children = new ArrayList<>();
 }
