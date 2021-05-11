@@ -28,4 +28,18 @@ public interface SysMenuMapper {
      * @return
      */
     List<SysMenuEntity> selectMenuTreeByUserId(Long userId);
+    /**
+     * 查询系统菜单列表
+     *
+     * @param menu 菜单信息
+     * @return 菜单列表
+     */
+    List<SysMenuEntity> selectMenuList(SysMenuEntity menu);
+    /**
+     * 根据用户查询系统菜单列表
+     *
+     * @param menu 菜单信息
+     * @return 菜单列表
+     */
+    List<SysMenuEntity> selectMenuListByUserId(SysMenuEntity menu);
 }

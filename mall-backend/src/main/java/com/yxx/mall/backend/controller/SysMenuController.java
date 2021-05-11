@@ -23,6 +23,18 @@ public class SysMenuController {
     @Autowired
     SysMenuService menuService;
 
+    @GetMapping("/list")
+    public R list(SysMenuEntity menu){
+        Long userId = SecurityUtils.getUserId();
+        List<SysMenuEntity> menus=menuService.selectMenuList(menu,userId);
+        return R.ok().put("data",menus);
+    }
+
+
+    /**
+     * 根据用户ID查询路由
+     * @return
+     */
     @GetMapping("/getRouters")
     public R getRouters(){
 

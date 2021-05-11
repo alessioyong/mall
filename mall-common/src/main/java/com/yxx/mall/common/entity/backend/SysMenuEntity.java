@@ -2,12 +2,14 @@ package com.yxx.mall.common.entity.backend;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 菜单权限表
@@ -81,6 +83,7 @@ public class SysMenuEntity implements Serializable {
 	/**
 	 * 创建时间
 	 */
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date createTime;
 	/**
 	 * 更新者
@@ -89,6 +92,7 @@ public class SysMenuEntity implements Serializable {
 	/**
 	 * 更新时间
 	 */
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date updateTime;
 	/**
 	 * 备注
@@ -97,4 +101,6 @@ public class SysMenuEntity implements Serializable {
 
 	/** 子菜单 */
 	private List<SysMenuEntity> children = new ArrayList<>();
+	/** 请求参数 */
+	private Map<String, Object> params;
 }

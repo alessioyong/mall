@@ -81,6 +81,29 @@ public class SysMenuServiceImpl implements SysMenuService {
         }
         return routers;
     }
+
+    /**
+     * 根据条件查询菜单列表
+     * @param menu
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<SysMenuEntity> selectMenuList(SysMenuEntity menu, Long userId) {
+        List<SysMenuEntity> menuList = null;
+        // 管理员显示所有菜单信息
+        if (SecurityUtils.isAdmin(userId))
+        {
+            menuList = menuMapper.selectMenuList(menu);
+        }
+        else
+        {
+            menu.getParams().put("userId", userId);
+            menuList = menuMapper.selectMenuListByUserId(menu);
+        }
+        return menuList;
+    }
+
     /**
      * 获取组件信息
      *

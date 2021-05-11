@@ -28,4 +28,12 @@ public interface SysMenuService {
      * @return
      */
     List<RouterVo> buildMenus(List<SysMenuEntity> menus);
+
+    /**
+     * 根据条件查询擦查单列表
+     * @param menu
+     * @param userId
+     * @return
+     */
+    List<SysMenuEntity> selectMenuList(SysMenuEntity menu, Long userId);
 }
