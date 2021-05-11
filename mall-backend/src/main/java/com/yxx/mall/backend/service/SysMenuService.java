@@ -36,4 +36,11 @@ public interface SysMenuService {
      * @return
      */
     List<SysMenuEntity> selectMenuList(SysMenuEntity menu, Long userId);
+
+    /**
+     * 根据菜单编号获取详细信息
+     * @param menuId
+     * @return
+     */
+    SysMenuEntity selectMenuById(Long menuId);
 }

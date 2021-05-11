@@ -42,4 +42,11 @@ public interface SysMenuMapper {
      * @return 菜单列表
      */
     List<SysMenuEntity> selectMenuListByUserId(SysMenuEntity menu);
+
+    /**
+     * 根据菜单编号获取菜单详细信息
+     * @param menuId
+     * @return
+     */
+    SysMenuEntity selectMenuById(Long menuId);
 }

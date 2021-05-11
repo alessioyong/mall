@@ -7,6 +7,7 @@ import com.yxx.mall.common.utils.R;
 import com.yxx.mall.common.utils.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,13 +24,27 @@ public class SysMenuController {
     @Autowired
     SysMenuService menuService;
 
+    /**
+     * 查询菜单列表
+     * @param menu
+     * @return
+     */
     @GetMapping("/list")
     public R list(SysMenuEntity menu){
         Long userId = SecurityUtils.getUserId();
         List<SysMenuEntity> menus=menuService.selectMenuList(menu,userId);
         return R.ok().put("data",menus);
     }
-
+    /**
+     * 根据菜单编号获取详细信息
+     */
+    //@PreAuthorize(hasPermi = "system:menu:query")
+    @GetMapping(value = "/{menuId}")
+    public R getInfo(@PathVariable Long menuId)
+    {
+        SysMenuEntity menu=menuService.selectMenuById(menuId);
+        return R.ok().put("data",menu);
+    }
 
     /**
      * 根据用户ID查询路由
@@ -37,7 +52,6 @@ public class SysMenuController {
      */
     @GetMapping("/getRouters")
     public R getRouters(){
-
         Long userId = SecurityUtils.getUserId();
         List<SysMenuEntity> menus=menuService.selectMenuTreeByUserId(userId);
         List<RouterVo> router=menuService.buildMenus(menus);

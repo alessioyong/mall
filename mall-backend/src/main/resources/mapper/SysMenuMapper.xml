@@ -84,4 +84,8 @@
         </if>
         order by m.parent_id, m.order_num
     </select>
+    <select id="selectMenuById" resultType="com.yxx.mall.common.entity.backend.SysMenuEntity">
+        <include refid="selectMenuVo"/>
+        where menu_id = #{menuId}
+    </select>
 </mapper>

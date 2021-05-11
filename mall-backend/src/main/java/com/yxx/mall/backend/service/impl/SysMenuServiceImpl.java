@@ -105,6 +105,16 @@ public class SysMenuServiceImpl implements SysMenuService {
     }
 
     /**
+     * 根据菜单编号获取详细信息
+     * @param menuId
+     * @return
+     */
+    @Override
+    public SysMenuEntity selectMenuById(Long menuId) {
+        return menuMapper.selectMenuById(menuId);
+    }
+
+    /**
      * 获取组件信息
      *
      * @param menu 菜单信息
