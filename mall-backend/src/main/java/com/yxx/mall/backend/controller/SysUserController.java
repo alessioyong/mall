@@ -18,7 +18,7 @@ import java.util.Set;
  * date 2021-05-10
  */
 @RestController
-@RequestMapping("/system")
+@RequestMapping("/system/user")
 @Slf4j
 public class SysUserController {
 
@@ -27,7 +27,7 @@ public class SysUserController {
 
     @Autowired
     SysUserService userService;
-    @GetMapping("/user/getInfo")
+    @GetMapping("/getInfo")
     public R getInfo(){
         Long userId = SecurityUtils.getUserId();
         log.info("用户ID:{}",userId);

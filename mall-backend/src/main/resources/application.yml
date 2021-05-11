@@ -1,11 +1,6 @@
-#端口号
-server:
-  port: 8801
-#模块名称
-spring:
-  application:
-    name: mall-backend
+
 #数据库链接
+spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
@@ -17,8 +12,10 @@ spring:
     host: 47.112.242.184
     port: 6379
     password:
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/**/*.xml
+
 #验证码类型 math,char
 mall:
   captchaType: char
-mybatis-plus:
-  mapper-locations: classpath:mapper/**/*.xml

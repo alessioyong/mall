@@ -1,0 +1,10 @@
+#端口号
+server:
+  port: 88
+#服务名称
+spring:
+  application:
+    name: mall-gateway
+  cloud:
+    nacos:
+      server-addr: 47.112.242.184:8848

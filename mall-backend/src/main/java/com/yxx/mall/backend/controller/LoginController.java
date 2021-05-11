@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -18,6 +19,7 @@ import java.util.Map;
  * date 2021-05-07
  */
 @RestController
+@RequestMapping("/system")
 public class LoginController {
 
     @Autowired
@@ -27,7 +29,7 @@ public class LoginController {
     private TokenService tokenService;
 
 
-    @PostMapping("/auth/login")
+    @PostMapping("/login")
     public R login(@Validated @RequestBody LoginBody loginBody){
         LoginUser loginUser = loginService.login(loginBody.getUsername(), loginBody.getPassword(), loginBody.getCode(), loginBody.getUuid());
         Map<String, Object> token = tokenService.createToken(loginUser);

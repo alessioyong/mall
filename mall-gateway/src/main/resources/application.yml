@@ -1,0 +1,25 @@
+spring:
+  redis:
+    host: 47.112.242.184
+    port: 6379
+    password:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        #后台管理
+        - id: mall-backend-route
+          uri: lb://mall-backend
+          predicates:
+            - Path=/system/**
+#          filters:
+#            - StripPrefix=1
+
+#白名单
+ignore:
+  whites:
+    - /system/code
+    - /system/login
