@@ -40,4 +40,32 @@ public class CategoryController {
         return R.ok();
     }
 
+    /**
+     * 添加新的分类菜单
+     * @param category
+     * @return
+     */
+    @PostMapping("/save")
+    public R save(@RequestBody CategoryEntity category){
+        categoryService.save(category);
+        return R.ok();
+    }
+
+    /**
+     * 根据ID更新分类菜单
+     * @param category
+     * @return
+     */
+    @PutMapping("/edit")
+    public R edit(@RequestBody CategoryEntity category){
+        categoryService.updateById(category);
+        return R.ok();
+    }
+
+    @GetMapping("/info/{id}")
+    public R info(@PathVariable("id") Long id){
+        CategoryEntity category = categoryService.getById(id);
+        return R.ok().put("data",category);
+    }
+
 }

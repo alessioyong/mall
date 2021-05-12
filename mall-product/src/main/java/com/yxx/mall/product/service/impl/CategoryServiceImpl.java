@@ -54,6 +54,8 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
      */
     @Override
     public void deleteByIds(List<Long> ids) {
+
+        //TODO 1.检查当前删除的菜单，是否被别的地方引用
         baseMapper.deleteBatchIds(ids);
     }
 }
