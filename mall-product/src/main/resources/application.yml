@@ -5,19 +5,16 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://47.112.242.184:3306/mall_admin?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+      url: jdbc:mysql://47.112.242.184:3306/mall_pms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
       username: root
       password: root
   redis:
     host: 47.112.242.184
     port: 6379
     password:
-
+#mybatisPlus配置
 mybatis-plus:
   mapper-locations: classpath:mapper/**/*.xml
   global-config:
     db-config:
       id-type: auto
-#验证码类型 math,char
-mall:
-  captchaType: char

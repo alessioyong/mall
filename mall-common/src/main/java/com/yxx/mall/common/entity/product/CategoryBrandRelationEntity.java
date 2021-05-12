@@ -7,33 +7,37 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * 属性&属性分组关联
+ * 品牌分类关联
  * 
  * @author xyong
  * @email ${email}
  * @date 2021-05-12 10:31:45
  */
 @Data
-@TableName("pms_attr_attrgroup_relation")
-public class AttrAttrgroupRelationEntity implements Serializable {
+@TableName("pms_category_brand_relation")
+public class CategoryBrandRelationEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * id
+	 * 
 	 */
 	@TableId
 	private Long id;
 	/**
-	 * 属性id
+	 * 品牌id
 	 */
-	private Long attrId;
+	private Long brandId;
 	/**
-	 * 属性分组id
+	 * 分类id
 	 */
-	private Long attrGroupId;
+	private Long catelogId;
 	/**
-	 * 属性组内排序
+	 * 
 	 */
-	private Integer attrSort;
+	private String brandName;
+	/**
+	 * 
+	 */
+	private String catelogName;
 
 }

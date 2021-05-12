@@ -131,7 +131,7 @@ public class SysMenuServiceImpl implements SysMenuService {
             throw new RRException("新增菜单'" + menu.getMenuName() + "'失败，地址必须以http(s)://开头");
         }
         menu.setCreateBy(SecurityUtils.getUsername());
-        return menuMapper.insert(menu);
+        return menuMapper.insertMenu(menu);
     }
 
     /**

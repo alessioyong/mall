@@ -2,47 +2,50 @@ package com.yxx.mall.common.entity.product;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-
-import java.io.Serializable;
-import java.util.Date;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
- * 属性分组
+ * 品牌
  * 
  * @author xyong
  * @email ${email}
  * @date 2021-05-12 10:31:45
  */
 @Data
-@TableName("pms_attr_group")
-public class AttrGroupEntity implements Serializable {
+@TableName("pms_brand")
+public class BrandEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 分组id
+	 * 品牌id
 	 */
 	@TableId
-	private Long attrGroupId;
+	private Long brandId;
 	/**
-	 * 组名
+	 * 品牌名
 	 */
-	private String attrGroupName;
+	private String name;
+	/**
+	 * 品牌logo地址
+	 */
+	private String logo;
+	/**
+	 * 介绍
+	 */
+	private String descript;
+	/**
+	 * 显示状态[0-不显示；1-显示]
+	 */
+	private Integer showStatus;
+	/**
+	 * 检索首字母
+	 */
+	private String firstLetter;
 	/**
 	 * 排序
 	 */
 	private Integer sort;
-	/**
-	 * 描述
-	 */
-	private String descript;
-	/**
-	 * 组图标
-	 */
-	private String icon;
-	/**
-	 * 所属分类id
-	 */
-	private Long catelogId;
 
 }

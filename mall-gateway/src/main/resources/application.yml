@@ -14,12 +14,19 @@ spring:
         - id: mall-backend-route
           uri: lb://mall-backend
           predicates:
-            - Path=/system/**
-#          filters:
-#            - StripPrefix=1
+            - Path=/api/system/**
+          filters:
+            - StripPrefix=1
+        - id: mall-product-route
+          uri: lb://mall-product
+          predicates:
+            - Path=/api/product/**
+          filters:
+            - StripPrefix=1
 
 #白名单
 ignore:
   whites:
     - /system/code
     - /system/login
+    - /system/logout

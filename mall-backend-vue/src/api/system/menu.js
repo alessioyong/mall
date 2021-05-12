@@ -36,7 +36,7 @@ export function roleMenuTreeselect(roleId) {
 // 新增菜单
 export function addMenu(data) {
   return request({
-    url: '/system/menu',
+    url: '/system/menu/add',
     method: 'post',
     data: data
   })

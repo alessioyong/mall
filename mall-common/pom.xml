@@ -20,6 +20,8 @@
         <mybatisPlus.version>3.4.2</mybatisPlus.version>
         <lombok.version>1.18.18</lombok.version>
         <httpcore.version>4.4.14</httpcore.version>
+<!--        <mysql.version>8.0.18</mysql.version>
+        <druid.version>1.2.4</druid.version>-->
     </properties>
     <dependencies>
         <!-- pagehelper 分页插件 -->
@@ -65,7 +67,6 @@
             <artifactId>fastjson</artifactId>
             <version>${fastjson.version}</version>
         </dependency>
-
 
         <!-- Jackson -->
         <dependency>

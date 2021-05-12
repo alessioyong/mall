@@ -7,15 +7,15 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * 属性&属性分组关联
+ * 商品评价回复关系
  * 
  * @author xyong
  * @email ${email}
  * @date 2021-05-12 10:31:45
  */
 @Data
-@TableName("pms_attr_attrgroup_relation")
-public class AttrAttrgroupRelationEntity implements Serializable {
+@TableName("pms_comment_replay")
+public class CommentReplayEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -24,16 +24,12 @@ public class AttrAttrgroupRelationEntity implements Serializable {
 	@TableId
 	private Long id;
 	/**
-	 * 属性id
+	 * 评论id
 	 */
-	private Long attrId;
+	private Long commentId;
 	/**
-	 * 属性分组id
+	 * 回复id
 	 */
-	private Long attrGroupId;
-	/**
-	 * 属性组内排序
-	 */
-	private Integer attrSort;
+	private Long replyId;
 
 }
