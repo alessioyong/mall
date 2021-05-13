@@ -2,6 +2,10 @@
   <div class="app-container">
     <el-row>
       <el-col :offset="1">
+        <el-button type="danger" @click="bacthDelete">批量删除</el-button>
+      </el-col>
+      
+      <el-col :offset="1">
         <el-tree
           :data="menus"
           :props="defaultProps"
@@ -9,6 +13,7 @@
           show-checkbox
           node-key="catId"
           :default-expanded-keys="expandedKey"
+          ref="menuTree"
         >
           <span class="custom-tree-node" slot-scope="{ node, data }">
             <span>{{ node.label }}</span>
@@ -112,7 +117,32 @@ export default {
         this.menus = res.data;
       });
     },
-
+    bacthDelete(){
+      let checkedNodes=this.$refs.menuTree.getCheckedNodes();
+      //console.log("被选中的元素：",checkedNodes)
+      let catIds=[];
+      let names=[];
+      for(let i=0;i<checkedNodes.length;i++){
+        catIds.push(checkedNodes[i].catId)
+        names.push(checkedNodes[i].name)
+      }
+      this.$confirm("是否批量删除【" + names + "】菜单?", "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(function () {
+          return removeTree(catIds);
+        })
+        .then(() => {
+          this.msgSuccess("批量删除成功");
+          //重新刷新菜单
+          this.getMenus();
+          //设置默认展开的菜单
+          //this.expandedKey = [node.parent.data.catId];
+        })
+        .catch(() => {});
+    },
     submitData(){
         if(this.titleType=="add"){
             this.add();

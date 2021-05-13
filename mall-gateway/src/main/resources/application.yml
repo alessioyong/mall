@@ -27,6 +27,6 @@ spring:
 #白名单
 ignore:
   whites:
-    - /system/code
-    - /system/login
-    - /system/logout
+    - /api/system/code
+    - /api/system/login
+    - /api/system/logout
