@@ -124,7 +124,15 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="品牌id" align="center" prop="brandId" />
       <el-table-column label="品牌名" align="center" prop="name" />
-      <el-table-column label="品牌logo地址" align="center" prop="logo" />
+      <el-table-column label="品牌logo" align="center" prop="logo">
+        <template slot-scope="scope">
+          <el-image
+            style="width: 100px; height: 100px"
+            :src="scope.row.logo"
+            fit="fit"
+          ></el-image>
+        </template>
+      </el-table-column>
       <el-table-column label="介绍" align="center" prop="descript" />
       <el-table-column label="显示状态" align="center" prop="showStatus">
         <template slot-scope="scope">
@@ -181,11 +189,12 @@
           <el-input v-model="form.name" placeholder="请输入品牌名" />
         </el-form-item>
         <el-form-item label="品牌logo地址" prop="logo">
-          <el-input
+          <!-- <el-input
             v-model="form.logo"
             type="textarea"
             placeholder="请输入内容"
-          />
+          /> -->
+          <single-upload v-model="form.logo"></single-upload>
         </el-form-item>
         <el-form-item label="介绍" prop="descript">
           <el-input
@@ -215,7 +224,13 @@
           <el-input v-model="form.firstLetter" placeholder="请输入检索首字母" />
         </el-form-item>
         <el-form-item label="排序" prop="sort">
-          <el-input v-model="form.sort" placeholder="请输入排序" />
+          <!-- <el-input v-model="form.sort" placeholder="请输入排序" /> -->
+          <el-input-number
+            v-model="form.sort"
+            @change="handleChange"
+            :min="0"
+            label="描述文字"
+          ></el-input-number>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -234,10 +249,11 @@ import {
   addBrand,
   updateBrand,
 } from "@/api/product/brand";
-
+import SingleUpload from "@/components/upload/singleUpload";
+//import SingleUpload from '../../../components/upload/singleUpload.vue';
 export default {
   name: "Brand",
-  components: {},
+  components: { SingleUpload },
   data() {
     return {
       statusOptions: [],
@@ -284,8 +300,7 @@ export default {
     });
   },
   methods: {
-
-
+    handleChange() {},
     /** 查询品牌列表 */
     getList() {
       this.loading = true;
@@ -335,12 +350,12 @@ export default {
       this.open = true;
       this.title = "添加品牌";
     },
-    updateBrandStatus(data){
-        console.log(data)
-        let {brandId,showStatus}=data;
-        updateBrand({brandId,showStatus:showStatus?1:0}).then((res)=>{
-            this.msgSuccess("修改状态成功！");
-        })
+    updateBrandStatus(data) {
+      console.log(data);
+      let { brandId, showStatus } = data;
+      updateBrand({ brandId, showStatus: showStatus ? 1 : 0 }).then((res) => {
+        this.msgSuccess("修改状态成功！");
+      });
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
