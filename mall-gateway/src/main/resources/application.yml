@@ -23,6 +23,15 @@ spring:
             - Path=/api/product/**
           filters:
             - StripPrefix=1
+        - id: third-party-route
+          uri: lb://mall-third-party
+          predicates:
+            - Path=/api/thirdparty/**
+          filters:
+            - StripPrefix=1
+    nacos:
+      discovery:
+        server-addr: 47.112.242.184:8848
 
 #白名单
 ignore:

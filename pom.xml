@@ -17,6 +17,7 @@
         <module>mall-backend</module>
         <module>mall-common</module>
         <module>mall-gateway</module>
+        <module>mall-third-party</module>
     </modules>
 
     <build>

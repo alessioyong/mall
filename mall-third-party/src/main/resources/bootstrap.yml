@@ -1,10 +1,10 @@
 server:
-  port: 8802
+  port: 8083
 
 spring:
   application:
-    name: mall-product
-  #nacos 注册中心
+    name: mall-third-party
+
   cloud:
     nacos:
       server-addr: 47.112.242.184:8848
