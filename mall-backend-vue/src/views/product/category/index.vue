@@ -4,7 +4,7 @@
       <el-col :offset="1">
         <el-button type="danger" @click="bacthDelete">批量删除</el-button>
       </el-col>
-      
+      <br>
       <el-col :offset="1">
         <el-tree
           :data="menus"
