@@ -1,7 +1,11 @@
 package com.yxx.mall.product.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yxx.mall.common.entity.product.AttrGroupEntity;
 import com.yxx.mall.common.entity.product.CategoryEntity;
+import com.yxx.mall.common.utils.RRException;
+import com.yxx.mall.product.mapper.AttrGroupMapper;
 import com.yxx.mall.product.mapper.CategoryMapper;
 import com.yxx.mall.product.service.CategoryService;
 import org.springframework.stereotype.Service;
@@ -16,6 +20,9 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
 
     @Resource
     CategoryMapper categoryMapper;
+
+    @Resource
+    AttrGroupMapper attrGroupMapper;
 
     @Override
     public List<CategoryEntity> listWithTree() {
@@ -55,7 +62,11 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
     @Override
     public void deleteByIds(List<Long> ids) {
 
-        //TODO 1.检查当前删除的菜单，是否被别的地方引用
-        baseMapper.deleteBatchIds(ids);
+        Integer count = attrGroupMapper.selectCount(new QueryWrapper<AttrGroupEntity>().in("catelog_id", ids));
+        if(count>0){
+            throw new RRException("当前菜单被其他地方引用，无法删除");
+        }else {
+            baseMapper.deleteBatchIds(ids);
+        }
     }
 }
