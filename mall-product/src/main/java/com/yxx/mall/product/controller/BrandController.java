@@ -4,8 +4,11 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yxx.mall.common.entity.product.BrandEntity;
 import com.yxx.mall.common.utils.R;
+import com.yxx.mall.common.validated.AddGroup;
+import com.yxx.mall.common.validated.EditGroup;
 import com.yxx.mall.product.service.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,7 +47,7 @@ public class BrandController {
      * @return
      */
     @PostMapping("/add")
-    public R add(@RequestBody BrandEntity brand){
+    public R add(@Validated({AddGroup.class}) @RequestBody BrandEntity brand){
         brandService.save(brand);
         return R.ok();
     }
@@ -66,7 +69,7 @@ public class BrandController {
      * @return
      */
     @PutMapping("/edit")
-    public R edit(@RequestBody BrandEntity brand){
+    public R edit(@Validated({EditGroup.class}) @RequestBody BrandEntity brand){
         boolean b = brandService.updateById(brand);
         return b==true?R.ok():R.error();
     }

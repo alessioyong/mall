@@ -287,9 +287,49 @@ export default {
         sort: null,
       },
       // 表单参数
-      form: {},
+      form: {
+        sort:0
+      },
       // 表单校验
-      rules: {},
+      rules: {
+        name: [
+          { required: true, message: "请输入品牌名称", trigger: "blur" },
+          { max: 10, message: "长度不超过 10 个字符", trigger: "blur" },
+        ],
+        descript: [
+          { required: true, message: "请输入品牌介绍", trigger: "blur" },
+        ],
+        firstLetter: [
+          {
+            validator: (rule, value, callback) => {
+              if (!value) {
+                return callback(new Error("检索首字母不能为空"));
+              } else if (!/^[a-z|A-Z]$/.test(value)) {
+                return callback(
+                  new Error("检索首字母只能是一个a-z或A-Z的字母")
+                );
+              } else {
+                return callback();
+              }
+            },
+            trigger: "blur",
+          },
+        ],
+        sort: [
+          {
+            validator: (rule, value, callback) => {
+              if (!value) {
+                return callback(new Error("排序字段不能为空"));
+              }else if(!Number.isInteger(value)&&value>=0){
+                return callback(new Error('排序字段必须是一个大于等于0的整数'))
+              }else{
+                return callback();
+              }
+            },
+            trigger: "blur",
+          },
+        ],
+      },
     };
   },
   created() {
