@@ -166,10 +166,15 @@
                 <el-input v-model="form.icon" placeholder="请输入组图标" />
               </el-form-item>
               <el-form-item label="所属分类id" prop="catelogId">
-                <el-input
+                <!-- <el-input
                   v-model="form.catelogId"
                   placeholder="请输入所属分类id"
-                />
+                /> -->
+                <el-cascader
+                  v-model="form.catelogId"
+                  :options="categorys"
+                  :props="props"
+                ></el-cascader>
               </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -187,6 +192,7 @@
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import Category from "../../modules/commons/category";
+import {listWithTree} from "@/api/product/category";
 import {
   listGroup,
   getGroup,
@@ -201,6 +207,12 @@ export default {
   data() {
     //这里存放数据
     return {
+      props:{
+        value:"catId",
+        label:"name",
+        children:"children"
+      },
+      categorys:[],
       catId: 0,
       // 遮罩层
       loading: true,
@@ -239,11 +251,17 @@ export default {
   watch: {},
   //方法集合
   methods: {
+    getCategory(){
+      listWithTree().then((res)=>{
+        console.log(res);
+        this.categorys=res.data;
+      })
+    },
     treeNodeClick(data, node, component) {
       console.log("感知到子节点被点击：", data, node, component);
       if (node.level == 3) {
         this.queryParams.catelogId = data.catId;
-        this.queryParams.attrGroupName=null;
+        this.queryParams.attrGroupName = null;
         this.getList();
       }
     },
@@ -360,6 +378,7 @@ export default {
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
     this.getList();
+    this.getCategory();
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {},
