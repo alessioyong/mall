@@ -2,7 +2,7 @@
   "name": "ruoyi",
   "version": "2.5.0",
   "description": "商城管理系统",
-  "author": "商城",
+  "author": "xyong",
   "license": "MIT",
   "scripts": {
     "dev": "vue-cli-service serve",

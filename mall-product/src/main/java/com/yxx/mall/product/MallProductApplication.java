@@ -8,6 +8,9 @@ public class MallProductApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(MallProductApplication.class, args);
+        System.out.println("===========================\n"+
+                           "===     商品服务启动成功   ===\n"+
+                           "===========================\n");
     }
 
 }

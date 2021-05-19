@@ -97,7 +97,7 @@
             :data="groupList"
             @selection-change="handleSelectionChange"
           >
-            <el-table-column type="selection" width="55" align="center" />
+            <el-table-column type="selection" width="45" align="center" />
             <el-table-column label="分组id" align="center" prop="attrGroupId" />
             <el-table-column label="组名" align="center" prop="attrGroupName" />
             <el-table-column label="排序" align="center" prop="sort" />
@@ -165,13 +165,15 @@
               <el-form-item label="组图标" prop="icon">
                 <el-input v-model="form.icon" placeholder="请输入组图标" />
               </el-form-item>
-              <el-form-item label="所属分类id" prop="catelogId">
+              <el-form-item label="所属分类" prop="catelogId">
                 <!-- <el-input
                   v-model="form.catelogId"
                   placeholder="请输入所属分类id"
                 /> -->
                 <el-cascader
-                  v-model="form.catelogId"
+                filterable
+                placeholder="试试搜索：手机"
+                  v-model="form.catelogPath"
                   :options="categorys"
                   :props="props"
                 ></el-cascader>
@@ -240,7 +242,9 @@ export default {
         catelogId: null,
       },
       // 表单参数
-      form: {},
+      form: {
+        catelogPath:0
+      },
       // 表单校验
       rules: {},
     };
@@ -329,12 +333,14 @@ export default {
       this.$refs["form"].validate((valid) => {
         if (valid) {
           if (this.form.attrGroupId != null) {
+            this.form.catelogId=this.form.catelogPath[this.form.catelogPath.length-1]
             updateGroup(this.form).then((response) => {
               this.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
+            this.form.catelogId=this.form.catelogPath[this.form.catelogPath.length-1]
             addGroup(this.form).then((response) => {
               this.msgSuccess("新增成功");
               this.open = false;

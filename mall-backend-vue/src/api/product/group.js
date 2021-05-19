@@ -20,7 +20,7 @@ export function getGroup(attrGroupId) {
 // 新增属性分组
 export function addGroup(data) {
   return request({
-    url: '/product/attrgroup',
+    url: '/product/attrgroup/add',
     method: 'post',
     data: data
   })
@@ -29,7 +29,7 @@ export function addGroup(data) {
 // 修改属性分组
 export function updateGroup(data) {
   return request({
-    url: '/product/attrgroup',
+    url: '/product/attrgroup/update',
     method: 'put',
     data: data
   })
@@ -38,7 +38,7 @@ export function updateGroup(data) {
 // 删除属性分组
 export function delGroup(attrGroupId) {
   return request({
-    url: '/product/attrgroup/' + attrGroupId,
+    url: '/product/attrgroup/delete/' + attrGroupId,
     method: 'delete'
   })
 }

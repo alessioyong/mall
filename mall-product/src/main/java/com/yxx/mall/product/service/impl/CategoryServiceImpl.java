@@ -11,6 +11,8 @@ import com.yxx.mall.product.service.CategoryService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,5 +70,28 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
         }else {
             baseMapper.deleteBatchIds(ids);
         }
+    }
+
+    /**
+     * 查询完整的路径
+     * @param catelogId
+     * @return
+     */
+    @Override
+    public Long[] findCatelogPath(Long catelogId) {
+        List<Long> paths=new ArrayList<>();
+        List<Long> parentPath = findParentPath(catelogId, paths);
+        Collections.reverse(parentPath);
+        return parentPath.toArray(new Long[parentPath.size()]);
+    }
+
+    private List<Long> findParentPath(Long catelogId,List<Long> path){
+        //1.收集当前节点ID
+        path.add(catelogId);
+        CategoryEntity byId = this.getById(catelogId);
+        if(byId.getParentCid()!=0){
+            findParentPath(byId.getParentCid(),path);
+        }
+        return path;
     }
 }
