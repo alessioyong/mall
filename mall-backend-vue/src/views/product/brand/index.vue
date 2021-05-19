@@ -157,6 +157,13 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-circle-plus-outline"
+            @click="updateCatelogHandle(scope.row.brandId)"
+            >关联分类</el-button
+          >
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['product:brand:edit']"
@@ -238,6 +245,62 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 添加或修改属性&属性分组关联对话框 -->
+    <el-dialog
+      title="关联分类"
+      :visible.sync="cateRelationDialogVisible"
+      width="500px"
+    >
+      <el-popover placement="right-end" v-model="popCatelogSelectVisible">
+        <category-cascader :catelogPath.sync="catelogPath"></category-cascader>
+        <div style="text-align: right; margin: 0">
+          <el-button
+            size="mini"
+            type="text"
+            @click="popCatelogSelectVisible = false"
+            >取消</el-button
+          >
+          <el-button type="primary" size="mini" @click="addCatelogSelect"
+            >确定</el-button
+          >
+        </div>
+        <el-button slot="reference">新增关联</el-button>
+      </el-popover>
+      <el-table :data="cateRelationTableData" style="width: 100%">
+        <el-table-column prop="id" label="#"></el-table-column>
+        <el-table-column prop="brandName" label="品牌名"></el-table-column>
+        <el-table-column prop="catelogName" label="分类名"></el-table-column>
+        <el-table-column
+          fixed="right"
+          header-align="center"
+          align="center"
+          label="操作"
+        >
+          <template slot-scope="scope">
+            <el-button
+              type="text"
+              size="small"
+              @click="deleteCateRelationHandle(scope.row.id, scope.row.brandId)"
+              >移除</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="cateRelationDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="cateRelationDialogVisible = false"
+          >确 定</el-button
+        >
+      </span>
+      <pagination
+        v-show="relationTotal > 0"
+        :total="relationTotal"
+        :page.sync="query.pageNum"
+        :limit.sync="query.pageSize"
+        @pagination="getCateRelation"
+      />
+    </el-dialog>
   </div>
 </template>
 
@@ -249,13 +312,20 @@ import {
   addBrand,
   updateBrand,
 } from "@/api/product/brand";
+import { listRelation, addRelation, delRelation } from "@/api/product/relation";
 import SingleUpload from "@/components/upload/singleUpload";
+import CategoryCascader from "../../modules/commons/category-cascader.vue";
 //import SingleUpload from '../../../components/upload/singleUpload.vue';
 export default {
   name: "Brand",
-  components: { SingleUpload },
+  components: { SingleUpload, CategoryCascader },
   data() {
     return {
+      cateRelationTableData: [],
+      catelogPath: [],
+      brandId: 0,
+      relationTotal: 0,
+      popCatelogSelectVisible: false,
       statusOptions: [],
       // 遮罩层
       loading: true,
@@ -275,6 +345,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      cateRelationDialogVisible: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -286,9 +357,14 @@ export default {
         firstLetter: null,
         sort: null,
       },
+      query: {
+        pageNum: 1,
+        pageSize: 10,
+        brandId: 0,
+      },
       // 表单参数
       form: {
-        sort:0
+        sort: 0,
       },
       // 表单校验
       rules: {
@@ -320,9 +396,9 @@ export default {
             validator: (rule, value, callback) => {
               if (!value) {
                 return callback(new Error("排序字段不能为空"));
-              }else if(!Number.isInteger(value)&&value>=0){
-                return callback(new Error('排序字段必须是一个大于等于0的整数'))
-              }else{
+              } else if (!Number.isInteger(value) && value >= 0) {
+                return callback(new Error("排序字段必须是一个大于等于0的整数"));
+              } else {
                 return callback();
               }
             },
@@ -336,10 +412,41 @@ export default {
     this.getList();
     this.getDicts("sys_brand_status").then((response) => {
       this.statusOptions = response.data;
-      console.log(this.showStatus);
+      //console.log(this.showStatus);
     });
   },
   methods: {
+    addCatelogSelect() {
+      this.popCatelogSelectVisible = false;
+      addRelation({
+        brandId: this.brandId,
+        catelogId: this.catelogPath[this.catelogPath.length - 1],
+      }).then((res) => {
+        this.getCateRelation();
+        this.msgSuccess("添加成功！");
+      });
+    },
+
+    deleteCateRelationHandle(id, brandId) {
+      delRelation(id).then((res)=>{
+        this.getCateRelation();
+        this.msgSuccess("删除成功！");
+      })
+    },
+
+    updateCatelogHandle(brandId) {
+      this.catelogPath=[]
+      this.cateRelationDialogVisible = true;
+      this.brandId = brandId;
+      this.query.brandId = brandId;
+      this.getCateRelation();
+    },
+    getCateRelation() {
+      listRelation(this.query).then((res) => {
+        this.cateRelationTableData = res.data.list;
+        this.relationTotal = res.data.total;
+      });
+    },
     handleChange() {},
     /** 查询品牌列表 */
     getList() {
@@ -355,6 +462,7 @@ export default {
       this.open = false;
       this.reset();
     },
+
     // 表单重置
     reset() {
       this.form = {
