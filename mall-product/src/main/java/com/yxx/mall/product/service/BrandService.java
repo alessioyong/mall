@@ -19,4 +19,10 @@ public interface BrandService extends IService<BrandEntity> {
      * @param brandIds
      */
     void batchRemove(Long[] brandIds);
+
+    /**
+     * 更新品牌
+     * @param brand
+     */
+    void updateData(BrandEntity brand);
 }

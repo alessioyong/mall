@@ -70,8 +70,8 @@ public class BrandController {
      */
     @PutMapping("/edit")
     public R edit(@Validated({EditGroup.class}) @RequestBody BrandEntity brand){
-        boolean b = brandService.updateById(brand);
-        return b==true?R.ok():R.error();
+        brandService.updateData(brand);
+        return R.ok();
     }
 
     /**

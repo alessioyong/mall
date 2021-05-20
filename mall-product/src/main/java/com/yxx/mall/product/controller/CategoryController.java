@@ -58,7 +58,7 @@ public class CategoryController {
      */
     @PutMapping("/edit")
     public R edit(@RequestBody CategoryEntity category){
-        categoryService.updateById(category);
+        categoryService.updateCasecade(category);
         return R.ok();
     }
 

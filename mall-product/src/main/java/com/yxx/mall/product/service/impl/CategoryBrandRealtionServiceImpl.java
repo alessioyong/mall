@@ -1,6 +1,7 @@
 package com.yxx.mall.product.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yxx.mall.common.entity.product.BrandEntity;
 import com.yxx.mall.common.entity.product.CategoryBrandRelationEntity;
@@ -51,5 +52,31 @@ public class CategoryBrandRealtionServiceImpl extends ServiceImpl<CategoryBrandR
         categoryBrandRelationEntity.setCatelogName(categoryEntity.getName());
 
         this.save(categoryBrandRelationEntity);
+    }
+
+    /**
+     * 更新关联表中的品牌信息
+     * @param brandId
+     * @param name
+     */
+    @Override
+    public void updateBrand(Long brandId, String name) {
+        CategoryBrandRelationEntity relationEntity = new CategoryBrandRelationEntity();
+        relationEntity.setBrandId(brandId);
+        relationEntity.setBrandName(name);
+        this.update(relationEntity,new UpdateWrapper<CategoryBrandRelationEntity>().eq("brand_id",brandId));
+    }
+
+    /**
+     * 更新关联表中的分类信息
+     * @param catId
+     * @param name
+     */
+    @Override
+    public void updateCategory(Long catId, String name) {
+        CategoryBrandRelationEntity relationEntity = new CategoryBrandRelationEntity();
+        relationEntity.setCatelogId(catId);
+        relationEntity.setCatelogName(name);
+        this.update(relationEntity,new UpdateWrapper<CategoryBrandRelationEntity>().eq("catelog_id",catId));
     }
 }

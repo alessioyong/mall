@@ -7,7 +7,9 @@ import com.yxx.mall.common.entity.product.CategoryEntity;
 import com.yxx.mall.common.utils.RRException;
 import com.yxx.mall.product.mapper.AttrGroupMapper;
 import com.yxx.mall.product.mapper.CategoryMapper;
+import com.yxx.mall.product.service.CategoryBrandRealtionService;
 import com.yxx.mall.product.service.CategoryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -25,6 +27,9 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
 
     @Resource
     AttrGroupMapper attrGroupMapper;
+
+    @Autowired
+    CategoryBrandRealtionService categoryBrandRealtionService;
 
     @Override
     public List<CategoryEntity> listWithTree() {
@@ -83,6 +88,16 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
         List<Long> parentPath = findParentPath(catelogId, paths);
         Collections.reverse(parentPath);
         return parentPath.toArray(new Long[parentPath.size()]);
+    }
+
+    /**
+     * 级联更新所有的关联数据
+     * @param category
+     */
+    @Override
+    public void updateCasecade(CategoryEntity category) {
+        this.updateById(category);
+        categoryBrandRealtionService.updateCategory(category.getCatId(),category.getName());
     }
 
     private List<Long> findParentPath(Long catelogId,List<Long> path){
