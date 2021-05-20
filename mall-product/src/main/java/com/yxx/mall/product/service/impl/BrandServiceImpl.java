@@ -47,7 +47,7 @@ public class BrandServiceImpl extends ServiceImpl<BrandMapper, BrandEntity> impl
     }
 
     /**
-     * 根棍品牌
+     * 更新品牌
      * @param brand
      */
     @Override

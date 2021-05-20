@@ -1,19 +1,22 @@
 <template>
-  <el-tree
-    :data="menus"
-    :props="defaultProps"
-    node-key="catId"
-    ref="menuTree"
-    @node-click="nodeClick"
-  ></el-tree>
+  <div>
+    <el-input placeholder="输入关键字进行过滤" v-model="filterText"> </el-input>
+    <el-tree
+      :data="menus"
+      :props="defaultProps"
+      node-key="catId"
+      ref="menuTree"
+      @node-click="nodeClick"
+      :filter-node-method="filterNode"
+      :highlight-current = "true"
+    ></el-tree>
+  </div>
 </template>
 
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import {
-  listWithTree
-} from "@/api/product/category";
+import { listWithTree } from "@/api/product/category";
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {},
@@ -21,6 +24,7 @@ export default {
   data() {
     //这里存放数据
     return {
+      filterText:'',
       menus: [],
       expandedKey: [],
       defaultProps: {
@@ -32,22 +36,30 @@ export default {
   //计算属性 类似于data概念
   computed: {},
   //监控data中的数据变化
-  watch: {},
+  watch: {
+    filterText(val) {
+      this.$refs.menuTree.filter(val);
+    }
+  },
   //方法集合
   methods: {
+    filterNode(value, data) {
+      if (!value) return true;
+      return data.name.indexOf(value) !== -1;
+    },
     getMenus() {
       listWithTree().then((res) => {
         this.menus = res.data;
       });
     },
-    nodeClick(data,node,component){
-        //console.log(data,node,component)
-        this.$emit("tree-node-click",data,node,component);
+    nodeClick(data, node, component) {
+      //console.log(data,node,component)
+      this.$emit("tree-node-click", data, node, component);
     },
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {
-      this.getMenus();
+    this.getMenus();
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {},
