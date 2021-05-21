@@ -42,8 +42,10 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper, AttrEntity> impleme
 
     @Autowired
     CategoryService categoryService;
+
     /**
      * 查询属性，规格参数列表
+     *
      * @param attr
      * @return
      */
@@ -72,13 +74,14 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper, AttrEntity> impleme
 
     /**
      * 保存规格参数信息
+     *
      * @param attrVo
      */
     @Override
     @Transactional
     public void saveAttr(AttrVo attrVo) {
         AttrEntity attrEntity = new AttrEntity();
-        BeanUtils.copyProperties(attrVo,attrEntity);
+        BeanUtils.copyProperties(attrVo, attrEntity);
         //1.保存基本数据
         this.save(attrEntity);
         //2.保存关联关系
@@ -92,14 +95,14 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper, AttrEntity> impleme
     public AttrRespVo getAttrInfo(Long attrId) {
         AttrEntity attrEntity = this.getById(attrId);
         AttrRespVo attrRespVo = new AttrRespVo();
-        BeanUtils.copyProperties(attrEntity,attrRespVo);
+        BeanUtils.copyProperties(attrEntity, attrRespVo);
         //设置分组信息
         AttrAttrgroupRelationEntity relationEntity = relationMapper.selectOne(new QueryWrapper<AttrAttrgroupRelationEntity>()
                 .eq("attr_id", attrEntity.getAttrId()));
-        if(relationEntity!=null){
+        if (relationEntity != null) {
             attrRespVo.setAttrGroupId(relationEntity.getAttrGroupId());
             AttrGroupEntity attrGroupEntity = attrGroupMapper.selectById(relationEntity.getAttrGroupId());
-            if(attrGroupEntity!=null){
+            if (attrGroupEntity != null) {
                 attrRespVo.setGroupName(attrGroupEntity.getAttrGroupName());
             }
         }
@@ -112,13 +115,14 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper, AttrEntity> impleme
 
     /**
      * 跟新规格参数信息
+     *
      * @param attr
      */
     @Override
     @Transactional
     public void updateAttr(AttrVo attr) {
         AttrEntity attrEntity = new AttrEntity();
-        BeanUtils.copyProperties(attr,attrEntity);
+        BeanUtils.copyProperties(attr, attrEntity);
         this.updateById(attrEntity);
         //更改关联表中的值
         AttrAttrgroupRelationEntity relationEntity = new AttrAttrgroupRelationEntity();
@@ -127,11 +131,29 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper, AttrEntity> impleme
 
         Integer count = relationMapper.selectCount(new QueryWrapper<AttrAttrgroupRelationEntity>()
                 .eq("attr_id", attr.getAttrId()));
-        if(count>0){
-            relationMapper.update(relationEntity,new UpdateWrapper<AttrAttrgroupRelationEntity>()
-                    .eq("attr_id",attr.getAttrId()));
-        }else {
+        if (count > 0) {
+            relationMapper.update(relationEntity, new UpdateWrapper<AttrAttrgroupRelationEntity>()
+                    .eq("attr_id", attr.getAttrId()));
+        } else {
             relationMapper.insert(relationEntity);
         }
+    }
+
+    /**
+     * 批量删除规格参数
+     *
+     * @param ids
+     */
+    @Override
+    public void deleteAttr(List<Long> ids) {
+        if (ids != null) {
+            this.removeByIds(ids);
+            //再删除关联表中信息
+            for (Long id : ids) {
+                relationMapper.delete(new QueryWrapper<AttrAttrgroupRelationEntity>()
+                .eq("attr_id",id));
+            }
+        }
+
     }
 }

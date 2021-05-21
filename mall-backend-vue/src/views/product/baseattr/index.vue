@@ -556,7 +556,7 @@ export default {
     handleDelete(row) {
       const attrIds = row.attrId || this.ids;
       this.$confirm(
-        '是否确认删除商品属性编号为"' + attrIds + '"的数据项?',
+        '是否确认删除规格参数编号为"' + attrIds + '"的数据项?',
         "警告",
         {
           confirmButtonText: "确定",

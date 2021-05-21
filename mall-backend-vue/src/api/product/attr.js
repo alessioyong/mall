@@ -38,7 +38,7 @@ export function updateAttr(data) {
 // 删除商品属性
 export function delAttr(attrId) {
   return request({
-    url: '/product/attr/' + attrId,
+    url: '/product/attr/delete/' + attrId,
     method: 'delete'
   })
 }

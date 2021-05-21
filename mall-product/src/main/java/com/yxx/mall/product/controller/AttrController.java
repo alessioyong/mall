@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -54,9 +55,26 @@ public class AttrController {
         return R.ok().put("data",attrRespVo);
     }
 
+    /**
+     * 更新参数规格
+     * @param attr
+     * @return
+     */
     @PutMapping("/update")
     public R update(@RequestBody AttrVo attr){
         attrService.updateAttr(attr);
+        return R.ok();
+    }
+
+    /**
+     * 批量删除规格参数
+     * @param ids
+     * @return
+     */
+    @DeleteMapping("/delete/{ids}")
+    public R delete(@PathVariable("ids") Long[] ids){
+
+        attrService.deleteAttr(Arrays.asList(ids));
         return R.ok();
     }
 }

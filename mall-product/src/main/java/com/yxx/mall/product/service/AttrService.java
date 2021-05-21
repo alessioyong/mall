@@ -15,4 +15,6 @@ public interface AttrService extends IService<AttrEntity> {
     AttrRespVo getAttrInfo(Long attrId);
 
     void updateAttr(AttrVo attr);
+
+    void deleteAttr(List<Long> ids);
 }
