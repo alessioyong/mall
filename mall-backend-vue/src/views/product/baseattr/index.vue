@@ -196,7 +196,7 @@
       />
     </el-col>
     <!-- 添加或修改商品属性对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body @closed="dialogClose">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="属性名" prop="attrName">
           <el-input v-model="form.attrName" placeholder="请输入属性名" />
@@ -481,11 +481,13 @@ export default {
         attrId: null,
         attrName: null,
         searchType: null,
+        valueType:null,
         icon: null,
         valueSelect: null,
         attrType: null,
         enable: null,
         catelogId: null,
+        attrGroupId:null,
         showDesc: null,
       };
       this.resetForm("form");
@@ -522,6 +524,7 @@ export default {
       const attrId = row.attrId || this.ids;
       getAttr(attrId).then((response) => {
         this.form = response.data;
+        this.catelogPath=response.data.catelogPath
         this.open = true;
         this.title = "修改商品属性";
       });
@@ -567,6 +570,9 @@ export default {
           this.msgSuccess("删除成功");
         });
     },
+    dialogClose(){
+      this.catelogPath = [];
+    }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {

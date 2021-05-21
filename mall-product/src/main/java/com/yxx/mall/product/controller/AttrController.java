@@ -42,4 +42,10 @@ public class AttrController {
         attrService.saveAttr(attrVo);
         return R.ok();
     }
+
+    @GetMapping("/{attrId}")
+    public R info(@PathVariable("attrId") Long attrId){
+        AttrRespVo attrRespVo=attrService.getAttrInfo(attrId);
+        return R.ok().put("data",attrRespVo);
+    }
 }

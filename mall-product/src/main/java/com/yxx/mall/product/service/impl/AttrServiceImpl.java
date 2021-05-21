@@ -11,9 +11,11 @@ import com.yxx.mall.product.mapper.AttrGroupMapper;
 import com.yxx.mall.product.mapper.AttrMapper;
 import com.yxx.mall.product.mapper.CategoryMapper;
 import com.yxx.mall.product.service.AttrService;
+import com.yxx.mall.product.service.CategoryService;
 import com.yxx.mall.product.vo.AttrRespVo;
 import com.yxx.mall.product.vo.AttrVo;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -36,6 +38,8 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper, AttrEntity> impleme
     @Resource
     CategoryMapper categoryMapper;
 
+    @Autowired
+    CategoryService categoryService;
     /**
      * 查询属性，规格参数列表
      * @param attr
@@ -79,5 +83,27 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper, AttrEntity> impleme
         relationEntity.setAttrGroupId(attrVo.getAttrGroupId());
         relationEntity.setAttrId(attrEntity.getAttrId());
         relationMapper.insert(relationEntity);
+    }
+
+    @Override
+    public AttrRespVo getAttrInfo(Long attrId) {
+        AttrEntity attrEntity = this.getById(attrId);
+        AttrRespVo attrRespVo = new AttrRespVo();
+        BeanUtils.copyProperties(attrEntity,attrRespVo);
+        //设置分组信息
+        AttrAttrgroupRelationEntity relationEntity = relationMapper.selectOne(new QueryWrapper<AttrAttrgroupRelationEntity>()
+                .eq("attr_id", attrEntity.getAttrId()));
+        if(relationEntity!=null){
+            attrRespVo.setAttrGroupId(relationEntity.getAttrGroupId());
+            AttrGroupEntity attrGroupEntity = attrGroupMapper.selectById(relationEntity.getAttrGroupId());
+            if(attrGroupEntity!=null){
+                attrRespVo.setGroupName(attrGroupEntity.getAttrGroupName());
+            }
+        }
+        //设置分类信息
+        Long catelogId = attrEntity.getCatelogId();
+        Long[] catelogPath = categoryService.findCatelogPath(catelogId);
+        attrRespVo.setCatelogPath(catelogPath);
+        return attrRespVo;
     }
 }
