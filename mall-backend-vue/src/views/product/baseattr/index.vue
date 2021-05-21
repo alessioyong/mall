@@ -525,6 +525,7 @@ export default {
       getAttr(attrId).then((response) => {
         this.form = response.data;
         this.catelogPath=response.data.catelogPath
+        this.form.valueSelect = response.data.valueSelect.split(";");
         this.open = true;
         this.title = "修改商品属性";
       });
@@ -534,6 +535,7 @@ export default {
       this.$refs["form"].validate((valid) => {
         if (valid) {
           if (this.form.attrId != null) {
+            this.form.valueSelect = this.form.valueSelect.join(";");
             updateAttr(this.form).then((response) => {
               this.msgSuccess("修改成功");
               this.open = false;

@@ -1,6 +1,7 @@
 package com.yxx.mall.product.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yxx.mall.common.entity.product.AttrAttrgroupRelationEntity;
 import com.yxx.mall.common.entity.product.AttrEntity;
@@ -17,6 +18,7 @@ import com.yxx.mall.product.vo.AttrVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -73,6 +75,7 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper, AttrEntity> impleme
      * @param attrVo
      */
     @Override
+    @Transactional
     public void saveAttr(AttrVo attrVo) {
         AttrEntity attrEntity = new AttrEntity();
         BeanUtils.copyProperties(attrVo,attrEntity);
@@ -105,5 +108,30 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper, AttrEntity> impleme
         Long[] catelogPath = categoryService.findCatelogPath(catelogId);
         attrRespVo.setCatelogPath(catelogPath);
         return attrRespVo;
+    }
+
+    /**
+     * 跟新规格参数信息
+     * @param attr
+     */
+    @Override
+    @Transactional
+    public void updateAttr(AttrVo attr) {
+        AttrEntity attrEntity = new AttrEntity();
+        BeanUtils.copyProperties(attr,attrEntity);
+        this.updateById(attrEntity);
+        //更改关联表中的值
+        AttrAttrgroupRelationEntity relationEntity = new AttrAttrgroupRelationEntity();
+        relationEntity.setAttrId(attr.getAttrId());
+        relationEntity.setAttrGroupId(attr.getAttrGroupId());
+
+        Integer count = relationMapper.selectCount(new QueryWrapper<AttrAttrgroupRelationEntity>()
+                .eq("attr_id", attr.getAttrId()));
+        if(count>0){
+            relationMapper.update(relationEntity,new UpdateWrapper<AttrAttrgroupRelationEntity>()
+                    .eq("attr_id",attr.getAttrId()));
+        }else {
+            relationMapper.insert(relationEntity);
+        }
     }
 }

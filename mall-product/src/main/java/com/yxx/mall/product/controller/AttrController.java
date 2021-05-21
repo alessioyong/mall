@@ -43,9 +43,20 @@ public class AttrController {
         return R.ok();
     }
 
+    /**
+     * 根据attrId查询规格参数信息
+     * @param attrId
+     * @return
+     */
     @GetMapping("/{attrId}")
     public R info(@PathVariable("attrId") Long attrId){
         AttrRespVo attrRespVo=attrService.getAttrInfo(attrId);
         return R.ok().put("data",attrRespVo);
+    }
+
+    @PutMapping("/update")
+    public R update(@RequestBody AttrVo attr){
+        attrService.updateAttr(attr);
+        return R.ok();
     }
 }

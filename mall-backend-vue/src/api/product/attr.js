@@ -29,7 +29,7 @@ export function addAttr(data) {
 // 修改商品属性
 export function updateAttr(data) {
   return request({
-    url: '/product/attr',
+    url: '/product/attr/update',
     method: 'put',
     data: data
   })
