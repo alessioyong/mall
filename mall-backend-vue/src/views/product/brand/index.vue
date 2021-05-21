@@ -311,6 +311,7 @@ import {
   delBrand,
   addBrand,
   updateBrand,
+  updateBrandStatus,
 } from "@/api/product/brand";
 import { listRelation, addRelation, delRelation } from "@/api/product/relation";
 import SingleUpload from "@/components/upload/singleUpload";
@@ -497,11 +498,15 @@ export default {
       this.reset();
       this.open = true;
       this.title = "添加品牌";
+      
+
+
+
     },
     updateBrandStatus(data) {
       console.log(data);
       let { brandId, showStatus } = data;
-      updateBrand({ brandId, showStatus: showStatus ? 1 : 0 }).then((res) => {
+      updateBrandStatus({ brandId, showStatus: showStatus ? 1 : 0 }).then((res) => {
         this.msgSuccess("修改状态成功！");
       });
     },

@@ -49,51 +49,58 @@
           >
         </el-form-item>
       </el-form>
-<el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['product:attr:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['product:attr:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['product:attr:remove']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['product:attr:export']"
-        >导出</el-button>
-      </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
-    </el-row>
+      <el-row :gutter="10" class="mb8">
+        <el-col :span="1.5">
+          <el-button
+            type="primary"
+            plain
+            icon="el-icon-plus"
+            size="mini"
+            @click="handleAdd"
+            v-hasPermi="['product:attr:add']"
+            >新增</el-button
+          >
+        </el-col>
+        <el-col :span="1.5">
+          <el-button
+            type="success"
+            plain
+            icon="el-icon-edit"
+            size="mini"
+            :disabled="single"
+            @click="handleUpdate"
+            v-hasPermi="['product:attr:edit']"
+            >修改</el-button
+          >
+        </el-col>
+        <el-col :span="1.5">
+          <el-button
+            type="danger"
+            plain
+            icon="el-icon-delete"
+            size="mini"
+            :disabled="multiple"
+            @click="handleDelete"
+            v-hasPermi="['product:attr:remove']"
+            >删除</el-button
+          >
+        </el-col>
+        <!-- <el-col :span="1.5">
+          <el-button
+            type="warning"
+            plain
+            icon="el-icon-download"
+            size="mini"
+            @click="handleExport"
+            v-hasPermi="['product:attr:export']"
+            >导出</el-button
+          >
+        </el-col> -->
+        <right-toolbar
+          :showSearch.sync="showSearch"
+          @queryTable="getList"
+        ></right-toolbar>
+      </el-row>
       <el-table
         v-loading="loading"
         :data="attrList"
@@ -102,33 +109,13 @@
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="属性id" align="center" prop="attrId" />
         <el-table-column label="属性名" align="center" prop="attrName" />
-        <el-table-column
-          label="是否需要检索"
-          align="center"
-          prop="searchType"
-        />
+        <el-table-column label="可检索" align="center" prop="searchType" />
         <el-table-column label="属性图标" align="center" prop="icon" />
-        <el-table-column
-          label="可选值列表"
-          align="center"
-          prop="valueSelect"
-        />
-        <el-table-column
-          label="属性类型"
-          align="center"
-          prop="attrType"
-        />
-        <el-table-column
-          label="启用状态"
-          align="center"
-          prop="enable"
-        />
+        <el-table-column label="可选值列表" align="center" prop="valueSelect" />
+        <el-table-column label="属性类型" align="center" prop="attrType" />
+        <el-table-column label="启用状态" align="center" prop="enable" />
         <el-table-column label="所属分类" align="center" prop="catelogId" />
-        <el-table-column
-          label="快速展示"
-          align="center"
-          prop="showDesc"
-        />
+        <el-table-column label="快速展示" align="center" prop="showDesc" />
         <el-table-column
           label="操作"
           align="center"
@@ -163,36 +150,91 @@
         @pagination="getList"
       />
     </el-col>
-     <!-- 添加或修改商品属性对话框 -->
+    <!-- 添加或修改商品属性对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="属性名" prop="attrName">
           <el-input v-model="form.attrName" placeholder="请输入属性名" />
         </el-form-item>
-        <el-form-item label="是否需要检索[0-不需要，1-需要]" prop="searchType">
-          <el-select v-model="form.searchType" placeholder="请选择是否需要检索[0-不需要，1-需要]">
-            <el-option label="请选择字典生成" value="" />
+        <el-form-item label="属性类型" prop="attrType">
+          <el-select v-model="form.attrType" placeholder="请选择属性类型">
+            <el-option
+              v-for="dict in attrOptions"
+              :key="dict.dictValue"
+              :label="dict.dictLabel"
+              :value="dict.dictValue"
+            />
           </el-select>
+        </el-form-item>
+
+        <el-form-item label="值类型" prop="valueType">
+          <el-switch
+            v-model="form.valueType"
+            active-text="允许多个值"
+            inactive-text="只能单个值"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            :inactive-value="0"
+            :active-value="1"
+          ></el-switch>
+        </el-form-item>
+        <el-form-item label="可选值" prop="valueSelect">
+          <el-select
+            v-model="form.valueSelect"
+            multiple
+            filterable
+            allow-create
+            placeholder="请输入内容"
+          ></el-select>
         </el-form-item>
         <el-form-item label="属性图标" prop="icon">
           <el-input v-model="form.icon" placeholder="请输入属性图标" />
         </el-form-item>
-        <el-form-item label="可选值列表[用逗号分隔]" prop="valueSelect">
-          <el-input v-model="form.valueSelect" placeholder="请输入可选值列表[用逗号分隔]" />
+        <el-form-item label="所属分类" prop="catelogId">
+          <category-cascader
+            :catelogPath.sync="catelogPath"
+          ></category-cascader>
         </el-form-item>
-        <el-form-item label="属性类型[0-销售属性，1-基本属性，2-既是销售属性又是基本属性]" prop="attrType">
-          <el-select v-model="form.attrType" placeholder="请选择属性类型[0-销售属性，1-基本属性，2-既是销售属性又是基本属性]">
-            <el-option label="请选择字典生成" value="" />
+        <el-form-item label="所属分组" prop="attrGroupId" v-if="type == 1">
+          <el-select
+            ref="groupSelect"
+            v-model="form.attrGroupId"
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="item in attrGroups"
+              :key="item.attrGroupId"
+              :label="item.attrGroupName"
+              :value="item.attrGroupId"
+            ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="启用状态[0 - 禁用，1 - 启用]" prop="enable">
-          <el-input v-model="form.enable" placeholder="请输入启用状态[0 - 禁用，1 - 启用]" />
+        <el-form-item label="可检索" prop="searchType" v-if="type == 1">
+          <el-switch
+            v-model="form.searchType"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            :active-value="1"
+            :inactive-value="0"
+          ></el-switch>
         </el-form-item>
-        <el-form-item label="所属分类" prop="catelogId">
-          <el-input v-model="form.catelogId" placeholder="请输入所属分类" />
+        <el-form-item label="快速展示" prop="showDesc" v-if="type == 1">
+          <el-switch
+            v-model="form.showDesc"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            :active-value="1"
+            :inactive-value="0"
+          ></el-switch>
         </el-form-item>
-        <el-form-item label="快速展示【是否展示在介绍上；0-否 1-是】，在sku中仍然可以调整" prop="showDesc">
-          <el-input v-model="form.showDesc" placeholder="请输入快速展示【是否展示在介绍上；0-否 1-是】，在sku中仍然可以调整" />
+        <el-form-item label="启用状态" prop="enable">
+          <el-switch
+            v-model="form.enable"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            :active-value="1"
+            :inactive-value="0"
+          ></el-switch>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -201,12 +243,11 @@
       </div>
     </el-dialog>
   </el-row>
-
-  
 </template>
 
 <script>
 import Category from "../../modules/commons/category.vue";
+import CategoryCascader from "../../modules/commons/category-cascader.vue";
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import {
@@ -216,10 +257,16 @@ import {
   addAttr,
   updateAttr,
 } from "@/api/product/attr";
+import { listGroup } from "@/api/product/group";
 export default {
   //import引入的组件需要注入到对象中才能使用
-  components: { Category },
-  props: {},
+  components: { Category, CategoryCascader },
+  props: {
+    type: {
+      type: Number,
+      default: 1,
+    },
+  },
   data() {
     //这里存放数据
     return {
@@ -258,22 +305,111 @@ export default {
         showDesc: null,
       },
       // 表单参数
-      form: {},
+      form: {
+        attrId: 0,
+        attrName: "",
+        searchType: 0,
+        valueType: 1,
+        icon: "",
+        valueSelect: "",
+        attrType: 1,
+        enable: 1,
+        catelogId: "",
+        attrGroupId: "",
+        showDesc: 0,
+      },
+      catelogPath: [],
+      attrGroups: [],
       // 表单校验
-      rules: {},
+      rules: {
+        attrName: [
+          { required: true, message: "属性名不能为空", trigger: "blur" },
+        ],
+        searchType: [
+          {
+            required: true,
+            message: "是否需要检索不能为空",
+            trigger: "blur",
+          },
+        ],
+        valueType: [
+          {
+            required: true,
+            message: "值类型不能为空",
+            trigger: "blur",
+          },
+        ],
+        icon: [
+          { required: true, message: "属性图标不能为空", trigger: "blur" },
+        ],
+        attrType: [
+          {
+            required: true,
+            message: "属性类型不能为空",
+            trigger: "blur",
+          },
+        ],
+        enable: [
+          {
+            required: true,
+            message: "启用状态不能为空",
+            trigger: "blur",
+          },
+        ],
+        catelogId: [
+          {
+            required: true,
+            message: "需要选择正确的三级分类数据",
+            trigger: "blur",
+          },
+        ],
+        showDesc: [
+          {
+            required: true,
+            message: "快速展示不能为空",
+            trigger: "blur",
+          },
+        ],
+      },
     };
   },
   //计算属性 类似于data概念
   computed: {},
   //监控data中的数据变化
-  watch: {},
+  watch: {
+    catelogPath(path) {
+      //监听到路径变化需要查出这个三级分类的分组信息
+      console.log("路径变了", path);
+      this.attrGroups = [];
+      this.form.attrGroupId = "";
+      this.form.catelogId = path[path.length - 1];
+      let query = {
+        pageNum: 1,
+        pageSize: 10000000,
+        catelogId: path[path.length - 1],
+      };
+      if (path && path.length == 3) {
+        listGroup(query).then((res) => {
+          console.log(res);
+          this.attrGroups = res.data.list;
+          console.log(this.attrGroups)
+        });
+      } else if (path.length == 0) {
+        this.dataForm.catelogId = "";
+      } else {
+        this.$message.error("请选择正确的分类");
+        this.form.catelogId = "";
+      }
+    },
+  },
   //方法集合
   methods: {
     //感知树节点被点击
     treeNodeClick(data, node, component) {
       if (node.level == 3) {
         this.catId = data.catId;
-        console.log(this.catId);
+        this.queryParams.catelogId = this.catId;
+        this.getList();
       }
     },
     /** 查询商品属性列表 */
@@ -308,6 +444,7 @@ export default {
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
+      this.queryParams.catelogId = null;
       this.getList();
     },
     /** 重置按钮操作 */
@@ -324,8 +461,13 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+
+      //去查询属性分组
+
       this.open = true;
       this.title = "添加商品属性";
+
+
     },
     /** 修改按钮操作 */
     handleUpdate(row) {

@@ -34,7 +34,14 @@ export function updateBrand(data) {
     data: data
   })
 }
-
+// 修改品牌
+export function updateBrandStatus(data) {
+  return request({
+    url: '/product/brand/editStatus',
+    method: 'put',
+    data: data
+  })
+}
 // 删除品牌
 export function delBrand(brandId) {
   return request({

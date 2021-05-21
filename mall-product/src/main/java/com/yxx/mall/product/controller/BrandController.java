@@ -7,6 +7,8 @@ import com.yxx.mall.common.utils.R;
 import com.yxx.mall.common.validated.AddGroup;
 import com.yxx.mall.common.validated.EditGroup;
 import com.yxx.mall.product.service.BrandService;
+import com.yxx.mall.product.vo.BrandStatusVo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -74,6 +76,18 @@ public class BrandController {
         return R.ok();
     }
 
+    /**
+     * 更新品牌显示状态
+     * @param brandStatusVo
+     * @return
+     */
+    @PutMapping("/editStatus")
+    public R editStatus(@RequestBody BrandStatusVo brandStatusVo){
+        BrandEntity brandEntity = new BrandEntity();
+        BeanUtils.copyProperties(brandStatusVo,brandEntity);
+        brandService.updateById(brandEntity);
+        return R.ok();
+    }
     /**
      * 批量删除品牌
      * @param brandIds
