@@ -21,7 +21,7 @@
             @keyup.enter.native="handleQuery"
           />
         </el-form-item>
-        <el-form-item label="属性类型" prop="attrType">
+        <!-- <el-form-item label="属性类型" prop="attrType">
           <el-select
             v-model="queryParams.attrType"
             placeholder="请选择属性类型"
@@ -35,7 +35,7 @@
               :value="dict.dictValue"
             />
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item>
           <el-button
             type="primary"
@@ -464,7 +464,8 @@ export default {
     /** 查询商品属性列表 */
     getList() {
       this.loading = true;
-      listAttr(this.queryParams).then((response) => {
+      let attrType='base';
+      listAttr(this.queryParams,attrType).then((response) => {
         this.attrList = response.data.list;
         this.total = response.data.total;
         this.loading = false;

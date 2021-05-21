@@ -26,12 +26,13 @@ public class AttrController {
     @Autowired
     AttrService attrService;
 
-    @GetMapping("/list")
+    @GetMapping("/{type}/list")
     public R list(@RequestParam("pageNum") Integer pageNum,
                   @RequestParam("pageSize") Integer pageSize,
-                  AttrEntity attr){
+                  AttrEntity attr,
+                  @PathVariable("type") String type){
         PageHelper.startPage(pageNum,pageSize);
-        List<AttrRespVo> list =attrService.selectAttrList(attr);
+        List<AttrRespVo> list =attrService.selectAttrList(attr,type);
         PageInfo pageInfo=new PageInfo(list);
         return R.ok().put("data",pageInfo);
 

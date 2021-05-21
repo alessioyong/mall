@@ -3,6 +3,7 @@ package com.yxx.mall.product.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yxx.mall.common.constant.ProductConstant;
 import com.yxx.mall.common.entity.product.AttrAttrgroupRelationEntity;
 import com.yxx.mall.common.entity.product.AttrEntity;
 import com.yxx.mall.common.entity.product.AttrGroupEntity;
@@ -47,20 +48,28 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper, AttrEntity> impleme
      * 查询属性，规格参数列表
      *
      * @param attr
+     * @param type
      * @return
      */
     @Override
-    public List<AttrRespVo> selectAttrList(AttrEntity attr) {
+    public List<AttrRespVo> selectAttrList(AttrEntity attr, String type) {
+        if(type.equals("base")){
+            attr.setAttrType(ProductConstant.AttrTypeEnum.ATTR_BASE_TYPE.getCode());
+        }else {
+            attr.setAttrType(ProductConstant.AttrTypeEnum.ATTR_SALE_TYPE.getCode());
+        }
         List<AttrEntity> attrEntities = baseMapper.selectAttrList(attr);
         List<AttrRespVo> attrRespVos = attrEntities.stream().map((attrEntity) -> {
             AttrRespVo attrRespVo = new AttrRespVo();
             BeanUtils.copyProperties(attrEntity, attrRespVo);
             //1.设置分类和分组的名字
-            AttrAttrgroupRelationEntity relationEntity = relationMapper.selectOne(new QueryWrapper<AttrAttrgroupRelationEntity>()
-                    .eq("attr_id", attrEntity.getAttrId()));
-            if (relationEntity != null) {
-                AttrGroupEntity groupEntity = attrGroupMapper.selectById(relationEntity.getAttrGroupId());
-                attrRespVo.setGroupName(groupEntity.getAttrGroupName());
+            if("base".equalsIgnoreCase(type)){
+                AttrAttrgroupRelationEntity relationEntity = relationMapper.selectOne(new QueryWrapper<AttrAttrgroupRelationEntity>()
+                        .eq("attr_id", attrEntity.getAttrId()));
+                if (relationEntity != null) {
+                    AttrGroupEntity groupEntity = attrGroupMapper.selectById(relationEntity.getAttrGroupId());
+                    attrRespVo.setGroupName(groupEntity.getAttrGroupName());
+                }
             }
             CategoryEntity categoryEntity = categoryMapper.selectById(attrEntity.getCatelogId());
             if (categoryEntity != null) {
@@ -85,10 +94,13 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper, AttrEntity> impleme
         //1.保存基本数据
         this.save(attrEntity);
         //2.保存关联关系
-        AttrAttrgroupRelationEntity relationEntity = new AttrAttrgroupRelationEntity();
-        relationEntity.setAttrGroupId(attrVo.getAttrGroupId());
-        relationEntity.setAttrId(attrEntity.getAttrId());
-        relationMapper.insert(relationEntity);
+        if(attrVo.getAttrType()==ProductConstant.AttrTypeEnum.ATTR_BASE_TYPE.getCode()){
+            AttrAttrgroupRelationEntity relationEntity = new AttrAttrgroupRelationEntity();
+            relationEntity.setAttrGroupId(attrVo.getAttrGroupId());
+            relationEntity.setAttrId(attrEntity.getAttrId());
+            relationMapper.insert(relationEntity);
+        }
+
     }
 
     @Override
@@ -96,16 +108,19 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper, AttrEntity> impleme
         AttrEntity attrEntity = this.getById(attrId);
         AttrRespVo attrRespVo = new AttrRespVo();
         BeanUtils.copyProperties(attrEntity, attrRespVo);
-        //设置分组信息
-        AttrAttrgroupRelationEntity relationEntity = relationMapper.selectOne(new QueryWrapper<AttrAttrgroupRelationEntity>()
-                .eq("attr_id", attrEntity.getAttrId()));
-        if (relationEntity != null) {
-            attrRespVo.setAttrGroupId(relationEntity.getAttrGroupId());
-            AttrGroupEntity attrGroupEntity = attrGroupMapper.selectById(relationEntity.getAttrGroupId());
-            if (attrGroupEntity != null) {
-                attrRespVo.setGroupName(attrGroupEntity.getAttrGroupName());
+        if(attrEntity.getAttrType()==ProductConstant.AttrTypeEnum.ATTR_BASE_TYPE.getCode()){
+            //设置分组信息
+            AttrAttrgroupRelationEntity relationEntity = relationMapper.selectOne(new QueryWrapper<AttrAttrgroupRelationEntity>()
+                    .eq("attr_id", attrEntity.getAttrId()));
+            if (relationEntity != null) {
+                attrRespVo.setAttrGroupId(relationEntity.getAttrGroupId());
+                AttrGroupEntity attrGroupEntity = attrGroupMapper.selectById(relationEntity.getAttrGroupId());
+                if (attrGroupEntity != null) {
+                    attrRespVo.setGroupName(attrGroupEntity.getAttrGroupName());
+                }
             }
         }
+
         //设置分类信息
         Long catelogId = attrEntity.getCatelogId();
         Long[] catelogPath = categoryService.findCatelogPath(catelogId);
@@ -125,18 +140,21 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper, AttrEntity> impleme
         BeanUtils.copyProperties(attr, attrEntity);
         this.updateById(attrEntity);
         //更改关联表中的值
-        AttrAttrgroupRelationEntity relationEntity = new AttrAttrgroupRelationEntity();
-        relationEntity.setAttrId(attr.getAttrId());
-        relationEntity.setAttrGroupId(attr.getAttrGroupId());
+        if(attr.getAttrType()==ProductConstant.AttrTypeEnum.ATTR_BASE_TYPE.getCode()){
+            AttrAttrgroupRelationEntity relationEntity = new AttrAttrgroupRelationEntity();
+            relationEntity.setAttrId(attr.getAttrId());
+            relationEntity.setAttrGroupId(attr.getAttrGroupId());
 
-        Integer count = relationMapper.selectCount(new QueryWrapper<AttrAttrgroupRelationEntity>()
-                .eq("attr_id", attr.getAttrId()));
-        if (count > 0) {
-            relationMapper.update(relationEntity, new UpdateWrapper<AttrAttrgroupRelationEntity>()
+            Integer count = relationMapper.selectCount(new QueryWrapper<AttrAttrgroupRelationEntity>()
                     .eq("attr_id", attr.getAttrId()));
-        } else {
-            relationMapper.insert(relationEntity);
+            if (count > 0) {
+                relationMapper.update(relationEntity, new UpdateWrapper<AttrAttrgroupRelationEntity>()
+                        .eq("attr_id", attr.getAttrId()));
+            } else {
+                relationMapper.insert(relationEntity);
+            }
         }
+
     }
 
     /**

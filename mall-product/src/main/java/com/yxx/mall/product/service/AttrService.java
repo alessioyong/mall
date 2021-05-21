@@ -8,7 +8,7 @@ import com.yxx.mall.product.vo.AttrVo;
 import java.util.List;
 
 public interface AttrService extends IService<AttrEntity> {
-    List<AttrRespVo> selectAttrList(AttrEntity attr);
+    List<AttrRespVo> selectAttrList(AttrEntity attr, String type);
 
     void saveAttr(AttrVo attrVo);
 

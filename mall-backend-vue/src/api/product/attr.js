@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 
 // 查询商品属性列表
-export function listAttr(query) {
+export function listAttr(query,attrType) {
   return request({
-    url: '/product/attr/list',
+    url: '/product/attr/'+attrType+'/list',
     method: 'get',
     params: query
   })
