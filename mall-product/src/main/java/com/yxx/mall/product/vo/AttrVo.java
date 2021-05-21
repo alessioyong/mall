@@ -46,6 +46,11 @@ public class AttrVo {
     private Integer showDesc;
 
     /**
+     * 值类型
+     */
+    private Integer valueType;
+
+    /**
      * 分组ID
      */
     private Long attrGroupId;

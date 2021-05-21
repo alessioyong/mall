@@ -14,10 +14,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="enable"    column="enable"    />
         <result property="catelogId"    column="catelog_id"    />
         <result property="showDesc"    column="show_desc"    />
+        <result property="valueType" column="value_type"/>
     </resultMap>
 
     <sql id="selectAttrVo">
-        select attr_id, attr_name, search_type, icon, value_select, attr_type, enable, catelog_id, show_desc from pms_attr
+        select attr_id, attr_name, search_type, icon, value_select, attr_type, enable, catelog_id, value_type, show_desc from pms_attr
     </sql>
 
     <select id="selectAttrList" parameterType="com.yxx.mall.common.entity.product.AttrEntity" resultMap="AttrResult">

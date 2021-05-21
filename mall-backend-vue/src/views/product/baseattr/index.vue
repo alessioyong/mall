@@ -109,13 +109,58 @@
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="属性id" align="center" prop="attrId" />
         <el-table-column label="属性名" align="center" prop="attrName" />
-        <el-table-column label="可检索" align="center" prop="searchType" />
+        <el-table-column
+          label="可检索"
+          align="center"
+          prop="searchType"
+          v-if="attrtype == 1"
+        >
+          <template slot-scope="scope">
+            <i class="el-icon-success" v-if="scope.row.searchType == 1"></i>
+            <i class="el-icon-error" v-else></i>
+          </template>
+        </el-table-column>
+         <el-table-column prop="valueType" header-align="center" align="center" label="值类型">
+            <template slot-scope="scope">
+              <el-tag type="success" v-if="scope.row.valueType==0">单选</el-tag>
+              <el-tag v-else>多选</el-tag>
+            </template>
+          </el-table-column>
         <el-table-column label="属性图标" align="center" prop="icon" />
-        <el-table-column label="可选值列表" align="center" prop="valueSelect" />
+        <!-- <el-table-column label="可选值列表" align="center" prop="valueSelect" /> -->
+         <el-table-column prop="valueSelect" header-align="center" align="center" label="可选值">
+            <template slot-scope="scope">
+              <el-tooltip placement="top">
+                <div slot="content">
+                  <span v-for="(i,index) in scope.row.valueSelect.split(';')" :key="index">{{i}}<br/></span>
+                </div>
+                <el-tag>{{scope.row.valueSelect.split(";")[0]+" ..."}}</el-tag>
+              </el-tooltip>
+            </template>
+          </el-table-column>
         <el-table-column label="属性类型" align="center" prop="attrType" />
-        <el-table-column label="启用状态" align="center" prop="enable" />
-        <el-table-column label="所属分类" align="center" prop="catelogId" />
-        <el-table-column label="快速展示" align="center" prop="showDesc" />
+        <!-- <el-table-column label="启用状态" align="center" prop="enable" /> -->
+        <el-table-column prop="enable" header-align="center" align="center" label="启用">
+            <template slot-scope="scope">
+              <i class="el-icon-success" v-if="scope.row.enable==1"></i>
+              <i class="el-icon-error" v-else></i>
+            </template>
+          </el-table-column>
+        <el-table-column label="所属分类" align="center" prop="catelogName" />
+        <el-table-column
+            v-if="attrtype == 1"
+            prop="groupName"
+            header-align="center"
+            align="center"
+            label="所属分组"
+          ></el-table-column>
+        <!-- <el-table-column label="快速展示" align="center" prop="showDesc" /> -->
+         <el-table-column v-if="attrtype == 1" prop="showDesc" header-align="center" align="center" label="快速展示">
+            <template slot-scope="scope">
+              <i class="el-icon-success" v-if="scope.row.showDesc==1"></i>
+              <i class="el-icon-error" v-else></i>
+            </template>
+          </el-table-column>
         <el-table-column
           label="操作"
           align="center"
@@ -266,6 +311,10 @@ export default {
       type: Number,
       default: 1,
     },
+    attrtype: {
+      type: Number,
+      default: 1
+    }
   },
   data() {
     //这里存放数据
@@ -392,7 +441,7 @@ export default {
         listGroup(query).then((res) => {
           console.log(res);
           this.attrGroups = res.data.list;
-          console.log(this.attrGroups)
+          console.log(this.attrGroups);
         });
       } else if (path.length == 0) {
         this.dataForm.catelogId = "";
@@ -466,8 +515,6 @@ export default {
 
       this.open = true;
       this.title = "添加商品属性";
-
-
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -490,6 +537,7 @@ export default {
               this.getList();
             });
           } else {
+            this.form.valueSelect = this.form.valueSelect.join(";");
             addAttr(this.form).then((response) => {
               this.msgSuccess("新增成功");
               this.open = false;

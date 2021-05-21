@@ -20,7 +20,7 @@ export function getAttr(attrId) {
 // 新增商品属性
 export function addAttr(data) {
   return request({
-    url: '/product/attr',
+    url: '/product/attr/add',
     method: 'post',
     data: data
   })
