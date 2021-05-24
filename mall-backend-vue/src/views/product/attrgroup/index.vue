@@ -118,6 +118,13 @@
                   size="mini"
                   type="text"
                   icon="el-icon-edit"
+                  @click="handleRelation(scope.row)"
+                  >关联</el-button
+                >
+                <el-button
+                  size="mini"
+                  type="text"
+                  icon="el-icon-edit"
                   @click="handleUpdate(scope.row)"
                   v-hasPermi="['product:group:edit']"
                   >修改</el-button
@@ -171,8 +178,8 @@
                   placeholder="请输入所属分类id"
                 /> -->
                 <el-cascader
-                filterable
-                placeholder="试试搜索：手机"
+                  filterable
+                  placeholder="试试搜索：手机"
                   v-model="form.catelogPath"
                   :options="categorys"
                   :props="props"
@@ -184,6 +191,12 @@
               <el-button @click="cancel">取 消</el-button>
             </div>
           </el-dialog>
+
+          <relation-update
+            v-if="relationVisible"
+            ref="relationUpdate"
+            @refreshData="getList"
+          ></relation-update>
         </div>
       </div>
     </el-col>
@@ -194,27 +207,29 @@
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import Category from "../../modules/commons/category";
-import {listWithTree} from "@/api/product/category";
+import RelationUpdate from "./attr-group-relation";
+import { listWithTree } from "@/api/product/category";
 import {
   listGroup,
   getGroup,
   delGroup,
   addGroup,
   updateGroup,
+  getAttrByGroupId,
 } from "@/api/product/group";
 export default {
   //import引入的组件需要注入到对象中才能使用
-  components: { Category },
+  components: { Category ,RelationUpdate},
   props: {},
   data() {
     //这里存放数据
     return {
-      props:{
-        value:"catId",
-        label:"name",
-        children:"children"
+      props: {
+        value: "catId",
+        label: "name",
+        children: "children",
       },
-      categorys:[],
+      categorys: [],
       catId: 0,
       // 遮罩层
       loading: true,
@@ -234,6 +249,8 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      //关联表格
+      relationVisible: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -243,7 +260,7 @@ export default {
       },
       // 表单参数
       form: {
-        catelogPath:0
+        catelogPath: 0,
       },
       // 表单校验
       rules: {},
@@ -255,11 +272,18 @@ export default {
   watch: {},
   //方法集合
   methods: {
-    getCategory(){
-      listWithTree().then((res)=>{
+    handleRelation(data) {
+      //console.log(data);
+      this.relationVisible = true;
+       this.$nextTick(() => {
+        this.$refs.relationUpdate.init(data.attrGroupId);
+      });
+    },
+    getCategory() {
+      listWithTree().then((res) => {
         console.log(res);
-        this.categorys=res.data;
-      })
+        this.categorys = res.data;
+      });
     },
     treeNodeClick(data, node, component) {
       console.log("感知到子节点被点击：", data, node, component);
@@ -333,14 +357,18 @@ export default {
       this.$refs["form"].validate((valid) => {
         if (valid) {
           if (this.form.attrGroupId != null) {
-            this.form.catelogId=this.form.catelogPath[this.form.catelogPath.length-1]
+            this.form.catelogId = this.form.catelogPath[
+              this.form.catelogPath.length - 1
+            ];
             updateGroup(this.form).then((response) => {
               this.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            this.form.catelogId=this.form.catelogPath[this.form.catelogPath.length-1]
+            this.form.catelogId = this.form.catelogPath[
+              this.form.catelogPath.length - 1
+            ];
             addGroup(this.form).then((response) => {
               this.msgSuccess("新增成功");
               this.open = false;

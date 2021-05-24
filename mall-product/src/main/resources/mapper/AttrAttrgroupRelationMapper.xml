@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yxx.mall.product.mapper.AttrAttrgroupRelationMapper">
+    
+    <resultMap type="com.yxx.mall.common.entity.product.AttrAttrgroupRelationEntity" id="AttrAttrgroupRelationResult">
+        <result property="id"    column="id"    />
+        <result property="attrId"    column="attr_id"    />
+        <result property="attrGroupId"    column="attr_group_id"    />
+        <result property="attrSort"    column="attr_sort"    />
+    </resultMap>
+
+    <sql id="selectAttrAttrgroupRelationVo">
+        select id, attr_id, attr_group_id, attr_sort from pms_attr_attrgroup_relation
+    </sql>
+
+    <select id="selectAttrAttrgroupRelationList" parameterType="com.yxx.mall.common.entity.product.AttrAttrgroupRelationEntity" resultMap="AttrAttrgroupRelationResult">
+        <include refid="selectAttrAttrgroupRelationVo"/>
+        <where>  
+            <if test="attrId != null "> and attr_id = #{attrId}</if>
+            <if test="attrGroupId != null "> and attr_group_id = #{attrGroupId}</if>
+            <if test="attrSort != null "> and attr_sort = #{attrSort}</if>
+        </where>
+    </select>
+    
+    <select id="selectAttrAttrgroupRelationById" parameterType="Long" resultMap="AttrAttrgroupRelationResult">
+        <include refid="selectAttrAttrgroupRelationVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAttrAttrgroupRelation" parameterType="com.yxx.mall.common.entity.product.AttrAttrgroupRelationEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into pms_attr_attrgroup_relation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="attrId != null">attr_id,</if>
+            <if test="attrGroupId != null">attr_group_id,</if>
+            <if test="attrSort != null">attr_sort,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="attrId != null">#{attrId},</if>
+            <if test="attrGroupId != null">#{attrGroupId},</if>
+            <if test="attrSort != null">#{attrSort},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAttrAttrgroupRelation" parameterType="com.yxx.mall.common.entity.product.AttrAttrgroupRelationEntity">
+        update pms_attr_attrgroup_relation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="attrId != null">attr_id = #{attrId},</if>
+            <if test="attrGroupId != null">attr_group_id = #{attrGroupId},</if>
+            <if test="attrSort != null">attr_sort = #{attrSort},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAttrAttrgroupRelationById" parameterType="Long">
+        delete from pms_attr_attrgroup_relation where id = #{id}
+    </delete>
+
+    <delete id="deleteAttrAttrgroupRelationByIds" parameterType="String">
+        delete from pms_attr_attrgroup_relation where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <delete id="deleteBathRelation">
+        delete from pms_attr_attrgroup_relation where
+        <foreach collection="entities" item="item" separator=" or ">
+            (attr_id=#{item.attrId} and attr_group_id=#{item.attrGroupId})
+        </foreach>
+    </delete>
+</mapper>

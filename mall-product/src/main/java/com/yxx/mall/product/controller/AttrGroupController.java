@@ -2,10 +2,13 @@ package com.yxx.mall.product.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yxx.mall.common.entity.product.AttrEntity;
 import com.yxx.mall.common.entity.product.AttrGroupEntity;
 import com.yxx.mall.common.utils.R;
 import com.yxx.mall.product.service.AttrGroupService;
+import com.yxx.mall.product.service.AttrService;
 import com.yxx.mall.product.service.CategoryService;
+import com.yxx.mall.product.vo.AttrGroupRelationVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +30,9 @@ public class AttrGroupController {
 
     @Autowired
     CategoryService categoryService;
+
+    @Autowired
+    AttrService attrService;
     /**
      * 查询分组列表
      * @param pageNum
@@ -42,6 +48,29 @@ public class AttrGroupController {
         List<AttrGroupEntity> list= attrGroupService.getAttrGroup(attrGroupEntity);
         PageInfo page=new PageInfo(list);
         return R.ok().put("data",page);
+    }
+
+
+    /**
+     * 根据分组Id查询关联的基本属性
+     * @param attrgroupId
+     * @return
+     */
+    @GetMapping("/{attrgroupId}/attr/relation")
+    public R attrRelation(@PathVariable("attrgroupId") Long attrgroupId){
+        List<AttrEntity> entities=attrService.getRelationAttr(attrgroupId);
+        return R.ok().put("data",entities);
+    }
+
+    /**
+     * 删除关联的基本属性
+     * @param vos
+     * @return
+     */
+    @PostMapping("/attr/relation/delete")
+    public R deleteAttrRelation(@RequestBody AttrGroupRelationVo[] vos){
+        attrService.deleteRelation(vos);
+        return R.ok();
     }
 
     /**

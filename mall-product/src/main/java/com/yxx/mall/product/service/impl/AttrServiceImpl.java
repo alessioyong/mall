@@ -14,14 +14,18 @@ import com.yxx.mall.product.mapper.AttrMapper;
 import com.yxx.mall.product.mapper.CategoryMapper;
 import com.yxx.mall.product.service.AttrService;
 import com.yxx.mall.product.service.CategoryService;
+import com.yxx.mall.product.vo.AttrGroupRelationVo;
 import com.yxx.mall.product.vo.AttrRespVo;
 import com.yxx.mall.product.vo.AttrVo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,6 +34,7 @@ import java.util.stream.Collectors;
  * date 2021-05-20
  */
 @Service
+@Slf4j
 public class AttrServiceImpl extends ServiceImpl<AttrMapper, AttrEntity> implements AttrService {
 
     @Resource
@@ -173,5 +178,43 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper, AttrEntity> impleme
             }
         }
 
+    }
+
+    /**
+     * 根据分组ID查询关联的所有基本属性
+     * @param attrgroupId
+     * @return
+     */
+    @Override
+    public List<AttrEntity> getRelationAttr(Long attrgroupId) {
+        List<AttrAttrgroupRelationEntity> relationEntities = relationMapper.selectList(new QueryWrapper<AttrAttrgroupRelationEntity>()
+                .eq("attr_group_id", attrgroupId));
+        log.info("relation:{}",relationEntities);
+        if(relationEntities!=null){
+            List<Long> attrIds = relationEntities.stream().map((attr) -> {
+                return attr.getAttrId();
+            }).collect(Collectors.toList());
+            log.info("ids:{}",attrIds);
+            if(CollectionUtils.isEmpty(attrIds)){
+                return null;
+            }
+            List<AttrEntity> entities = this.listByIds(attrIds);
+            return entities;
+        }
+        return null;
+    }
+
+    /**
+     * 删除属性分组关联关系
+     * @param vos
+     */
+    @Override
+    public void deleteRelation(AttrGroupRelationVo[] vos) {
+        List<AttrAttrgroupRelationEntity> entities = Arrays.asList(vos).stream().map((item) -> {
+            AttrAttrgroupRelationEntity relationEntity = new AttrAttrgroupRelationEntity();
+            BeanUtils.copyProperties(item, relationEntity);
+            return relationEntity;
+        }).collect(Collectors.toList());
+        relationMapper.deleteBathRelation(entities);
     }
 }

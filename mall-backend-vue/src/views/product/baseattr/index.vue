@@ -167,6 +167,7 @@
           class-name="small-padding fixed-width"
         >
           <template slot-scope="scope">
+           
             <el-button
               size="mini"
               type="text"
@@ -428,7 +429,7 @@ export default {
   watch: {
     catelogPath(path) {
       //监听到路径变化需要查出这个三级分类的分组信息
-      console.log("路径变了", path);
+      //console.log("路径变了", path);
       this.attrGroups = [];
       this.form.attrGroupId = "";
       this.form.catelogId = path[path.length - 1];

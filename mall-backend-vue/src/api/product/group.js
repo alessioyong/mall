@@ -16,7 +16,13 @@ export function getGroup(attrGroupId) {
     method: 'get'
   })
 }
-
+// 查询属性分组详细
+export function getAttrByGroupId(attrGroupId) {
+  return request({
+    url: '/product/attrgroup/' + attrGroupId+'/attr/relation',
+    method: 'get'
+  })
+}
 // 新增属性分组
 export function addGroup(data) {
   return request({
@@ -42,3 +48,12 @@ export function delGroup(attrGroupId) {
     method: 'delete'
   })
 }
+
+export function delGroupRelation(data) {
+  return request({
+    url: '/product/attrgroup/attr/relation/delete',
+    method: 'post',
+    data:data
+  })
+}
+
