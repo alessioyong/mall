@@ -49,6 +49,7 @@ export function delGroup(attrGroupId) {
   })
 }
 
+//删除关联关系
 export function delGroupRelation(data) {
   return request({
     url: '/product/attrgroup/attr/relation/delete',
@@ -57,3 +58,20 @@ export function delGroupRelation(data) {
   })
 }
 
+// /{attrgroupId}/noattr/relation
+export function listNoAttrRelation(query,attrGroupId) {
+  return request({
+    url: '/product/attrgroup/'+attrGroupId+'/noattr/relation',
+    method: 'get',
+    params: query
+  })
+}
+
+// 新增属性分组关联关系
+export function addGroupRelation(data) {
+  return request({
+    url: '/product/attrgroup/attr/relation',
+    method: 'post',
+    data: data
+  })
+}

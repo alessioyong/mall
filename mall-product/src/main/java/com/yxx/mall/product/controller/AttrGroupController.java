@@ -5,15 +5,18 @@ import com.github.pagehelper.PageInfo;
 import com.yxx.mall.common.entity.product.AttrEntity;
 import com.yxx.mall.common.entity.product.AttrGroupEntity;
 import com.yxx.mall.common.utils.R;
+import com.yxx.mall.product.service.AttrAttrgroupRelationService;
 import com.yxx.mall.product.service.AttrGroupService;
 import com.yxx.mall.product.service.AttrService;
 import com.yxx.mall.product.service.CategoryService;
 import com.yxx.mall.product.vo.AttrGroupRelationVo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 属性分组Controller
@@ -23,6 +26,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/product/attrgroup")
+@Slf4j
 public class AttrGroupController {
 
     @Autowired
@@ -33,6 +37,9 @@ public class AttrGroupController {
 
     @Autowired
     AttrService attrService;
+
+    @Autowired
+    AttrAttrgroupRelationService relationService;
     /**
      * 查询分组列表
      * @param pageNum
@@ -62,6 +69,13 @@ public class AttrGroupController {
         return R.ok().put("data",entities);
     }
 
+    @GetMapping("/{attrgroupId}/noattr/relation")
+    public R attrNoRelation(@RequestParam Map<String,Object> params,
+                            @PathVariable("attrgroupId") Long attrgroupId){
+        log.info("params:{}",params);
+        PageInfo pageInfo=attrService.getNoRelationAttr(params,attrgroupId);
+        return R.ok().put("data",pageInfo);
+    }
     /**
      * 删除关联的基本属性
      * @param vos
@@ -84,6 +98,11 @@ public class AttrGroupController {
         return R.ok();
     }
 
+    @PostMapping("/attr/relation")
+    public R addRelation(@RequestBody List<AttrGroupRelationVo> vos){
+        relationService.batchSave(vos);
+        return R.ok();
+    }
     /**
      * 根据ID查询分组信息
      * @param attrGroupId

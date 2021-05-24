@@ -3,6 +3,8 @@ package com.yxx.mall.product.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.yxx.mall.common.constant.ProductConstant;
 import com.yxx.mall.common.entity.product.AttrAttrgroupRelationEntity;
 import com.yxx.mall.common.entity.product.AttrEntity;
@@ -23,10 +25,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -71,7 +75,7 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper, AttrEntity> impleme
             if("base".equalsIgnoreCase(type)){
                 AttrAttrgroupRelationEntity relationEntity = relationMapper.selectOne(new QueryWrapper<AttrAttrgroupRelationEntity>()
                         .eq("attr_id", attrEntity.getAttrId()));
-                if (relationEntity != null) {
+                if (relationEntity != null&&relationEntity.getAttrGroupId()!=null) {
                     AttrGroupEntity groupEntity = attrGroupMapper.selectById(relationEntity.getAttrGroupId());
                     attrRespVo.setGroupName(groupEntity.getAttrGroupName());
                 }
@@ -99,7 +103,7 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper, AttrEntity> impleme
         //1.保存基本数据
         this.save(attrEntity);
         //2.保存关联关系
-        if(attrVo.getAttrType()==ProductConstant.AttrTypeEnum.ATTR_BASE_TYPE.getCode()){
+        if(attrVo.getAttrType()==ProductConstant.AttrTypeEnum.ATTR_BASE_TYPE.getCode()&&attrVo.getAttrGroupId()!=null){
             AttrAttrgroupRelationEntity relationEntity = new AttrAttrgroupRelationEntity();
             relationEntity.setAttrGroupId(attrVo.getAttrGroupId());
             relationEntity.setAttrId(attrEntity.getAttrId());
@@ -216,5 +220,48 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper, AttrEntity> impleme
             return relationEntity;
         }).collect(Collectors.toList());
         relationMapper.deleteBathRelation(entities);
+    }
+
+    /**
+     * 获取当前分组没有关联的所有属性
+     * @param params
+     * @param attrgroupId
+     * @return
+     */
+    @Override
+    public PageInfo getNoRelationAttr(Map<String, Object> params, Long attrgroupId) {
+        //1.当前分组只能关联自己所属分类中的所有属性
+        AttrGroupEntity attrGroupEntity = attrGroupMapper.selectById(attrgroupId);
+        Long catelogId = attrGroupEntity.getCatelogId();
+        //2.当前分组只能关联别的分组没有引用的属性
+        //2.1当前分类下的其他属性
+        List<AttrGroupEntity> group = attrGroupMapper.selectList(new QueryWrapper<AttrGroupEntity>()
+                .eq("catelog_id", catelogId));
+        List<Long> collect = group.stream().map((item) -> {
+            return item.getAttrGroupId();
+        }).collect(Collectors.toList());
+        //2.2这些分组关联的属性
+        List<AttrAttrgroupRelationEntity> relationEntities = relationMapper.selectList(new QueryWrapper<AttrAttrgroupRelationEntity>()
+                .in("attr_group_id", collect));
+        List<Long> attrIds = relationEntities.stream().map((item) -> {
+            return item.getAttrId();
+        }).collect(Collectors.toList());
+        //2.3从当前分类的所有属性中移除这些属性
+        QueryWrapper<AttrEntity> wrapper = new QueryWrapper<AttrEntity>()
+                .eq("catelog_id", catelogId).eq("attr_type",ProductConstant.AttrTypeEnum.ATTR_BASE_TYPE.getCode());
+        if(attrIds!=null&&attrIds.size()>0){
+              wrapper.notIn("attr_id", attrIds);
+        }
+        String key = (String) params.get("key");
+        if(!StringUtils.isEmpty(key)){
+            wrapper.eq("attr_id",key).or().like("attr_name",key);
+        }
+        List<AttrEntity> attrEntities = this.baseMapper.selectList(wrapper);
+        Integer pageNum = Integer.valueOf((String) params.get("pageNum")) ;
+        Integer pageSize =Integer.valueOf((String) params.get("pageSize")) ;
+        PageHelper.startPage(pageNum,pageSize);
+        PageInfo page=new PageInfo(attrEntities);
+
+        return page;
     }
 }
