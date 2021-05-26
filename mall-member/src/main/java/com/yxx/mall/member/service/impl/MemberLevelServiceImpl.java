@@ -44,4 +44,14 @@ public class MemberLevelServiceImpl extends ServiceImpl<MemberLevelMapper, Membe
         PageInfo page=new PageInfo(entities);
         return page;
     }
+
+    /**
+     * 批量删除会员等级信息
+     * @param ids
+     */
+    @Override
+    public void batchDeleteByIds(List<Long> ids) {
+        //TODO 看是否有依赖关系
+        this.removeByIds(ids);
+    }
 }

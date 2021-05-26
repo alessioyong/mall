@@ -339,7 +339,33 @@ export default {
       // 表单参数
       form: {},
       // 表单校验
-      rules: {},
+      rules: {name: [
+            { required: true, message: '等级名称不能为空', trigger: 'blur' }
+          ],
+          growthPoint: [
+            { required: true, message: '等级需要的成长值不能为空', trigger: 'blur' }
+          ],
+          defaultStatus: [
+            { required: true, message: '是否为默认等级[0->不是；1->是]不能为空', trigger: 'blur' }
+          ],
+          freeFreightPoint: [
+            { required: true, message: '免运费标准不能为空', trigger: 'blur' }
+          ],
+          commentGrowthPoint: [
+            { required: true, message: '每次评价获取的成长值不能为空', trigger: 'blur' }
+          ],
+          priviledgeFreeFreight: [
+            { required: true, message: '是否有免邮特权不能为空', trigger: 'blur' }
+          ],
+          priviledgeMemberPrice: [
+            { required: true, message: '是否有会员价格特权不能为空', trigger: 'blur' }
+          ],
+          priviledgeBirthday: [
+            { required: true, message: '是否有生日特权不能为空', trigger: 'blur' }
+          ],
+          note: [
+            { required: true, message: '备注不能为空', trigger: 'blur' }
+          ]},
     };
   },
   created() {

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.pagehelper.PageInfo;
 import com.yxx.mall.common.entity.member.MemberLevelEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,4 +13,6 @@ import java.util.Map;
  */
 public interface MemberLevelService extends IService<MemberLevelEntity> {
     PageInfo listLeves(Map<String, Object> params);
+
+    void batchDeleteByIds(List<Long> asList);
 }
