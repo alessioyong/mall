@@ -98,6 +98,11 @@ public class AttrGroupController {
         return R.ok();
     }
 
+    /**
+     * 新建分组关联关系
+     * @param vos
+     * @return
+     */
     @PostMapping("/attr/relation")
     public R addRelation(@RequestBody List<AttrGroupRelationVo> vos){
         relationService.batchSave(vos);

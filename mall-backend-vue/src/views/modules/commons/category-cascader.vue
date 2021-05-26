@@ -64,6 +64,7 @@ export default {
     getCategorys() {
       listWithTree().then((res) => {
         this.categorys = res.data;
+        console.log(this.categorys)
       });
     }
   },

@@ -364,7 +364,7 @@ export default {
         valueSelect: "",
         attrType: 1,
         enable: 1,
-        catelogId: "",
+        catelogId: null,
         attrGroupId: "",
         showDesc: 0,
       },

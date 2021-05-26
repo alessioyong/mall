@@ -17,12 +17,21 @@ spring:
             - Path=/api/system/**
           filters:
             - StripPrefix=1
+
         - id: mall-product-route
           uri: lb://mall-product
           predicates:
             - Path=/api/product/**
           filters:
             - StripPrefix=1
+
+        - id: mall-member-route
+          uri: lb://mall-member
+          predicates:
+            - Path=/api/member/**
+          filters:
+            - StripPrefix=1
+
         - id: third-party-route
           uri: lb://mall-third-party
           predicates:
