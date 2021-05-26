@@ -9,11 +9,14 @@ import com.yxx.mall.common.entity.product.CategoryEntity;
 import com.yxx.mall.product.mapper.BrandMapper;
 import com.yxx.mall.product.mapper.CategoryBrandRealtionMapper;
 import com.yxx.mall.product.mapper.CategoryMapper;
+import com.yxx.mall.product.service.BrandService;
 import com.yxx.mall.product.service.CategoryBrandRealtionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author xyong
@@ -26,6 +29,9 @@ public class CategoryBrandRealtionServiceImpl extends ServiceImpl<CategoryBrandR
     CategoryMapper categoryMapper;
     @Resource
     BrandMapper brandMapper;
+
+    @Autowired
+    BrandService brandService;
     /**
      * 根据Id查询关联关系
      * @param brandId
@@ -78,5 +84,18 @@ public class CategoryBrandRealtionServiceImpl extends ServiceImpl<CategoryBrandR
         relationEntity.setCatelogId(catId);
         relationEntity.setCatelogName(name);
         this.update(relationEntity,new UpdateWrapper<CategoryBrandRelationEntity>().eq("catelog_id",catId));
+    }
+
+    @Override
+    public List<BrandEntity> getBrandsByCatId(Long catId) {
+
+        List<CategoryBrandRelationEntity> catelogId = this.baseMapper.selectList(new QueryWrapper<CategoryBrandRelationEntity>()
+                .eq("catelog_id", catId));
+        List<BrandEntity> collect = catelogId.stream().map((item) -> {
+            Long brandId = item.getBrandId();
+            BrandEntity byId = brandService.getById(brandId);
+            return byId;
+        }).collect(Collectors.toList());
+        return collect;
     }
 }

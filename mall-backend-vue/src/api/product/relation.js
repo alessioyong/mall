@@ -3,16 +3,23 @@ import request from '@/utils/request'
 // 查询属性&属性分组关联列表
 export function listRelation(query) {
   return request({
-    url: '/product/relation/list',
+    url: '/product/categorybrandrelation/list',
     method: 'get',
     params: query
   })
 }
-
+// 查询属性&属性分组关联列表
+export function listBrandRelation(query) {
+  return request({
+    url: '/product/categorybrandrelation/brands/list',
+    method: 'get',
+    params: query
+  })
+}
 // 查询属性&属性分组关联详细
 export function getRelation(id) {
   return request({
-    url: '/product/relation/' + id,
+    url: '/product/categorybrandrelation/' + id,
     method: 'get'
   })
 }
@@ -20,7 +27,7 @@ export function getRelation(id) {
 // 新增属性&属性分组关联
 export function addRelation(data) {
   return request({
-    url: '/product/relation/save',
+    url: '/product/categorybrandrelation/save',
     method: 'post',
     data: data
   })
@@ -29,7 +36,7 @@ export function addRelation(data) {
 // 修改属性&属性分组关联
 export function updateRelation(data) {
   return request({
-    url: '/product/relation',
+    url: '/product/categorybrandrelation',
     method: 'put',
     data: data
   })
@@ -38,7 +45,7 @@ export function updateRelation(data) {
 // 删除属性&属性分组关联
 export function delRelation(id) {
   return request({
-    url: '/product/relation/delete/' + id,
+    url: '/product/categorybrandrelation/delete/' + id,
     method: 'delete'
   })
 }
