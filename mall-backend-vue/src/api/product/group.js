@@ -75,3 +75,12 @@ export function addGroupRelation(data) {
     data: data
   })
 }
+
+
+// 查询分类下的分组属性详细
+export function getAttrGroupWithAttrs(attrGroupId) {
+  return request({
+    url: '/product/attrgroup/' + attrGroupId+'/withattr',
+    method: 'get'
+  })
+}

@@ -10,6 +10,7 @@ import com.yxx.mall.product.service.AttrGroupService;
 import com.yxx.mall.product.service.AttrService;
 import com.yxx.mall.product.service.CategoryService;
 import com.yxx.mall.product.vo.AttrGroupRelationVo;
+import com.yxx.mall.product.vo.AttrGroupWithAttrsVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -57,6 +58,12 @@ public class AttrGroupController {
         return R.ok().put("data",page);
     }
 
+
+    @GetMapping("/{catelogId}/withattr")
+    public R getAttrGroupWithAttrs(@PathVariable("catelogId") Long catelogId){
+        List<AttrGroupWithAttrsVo> vos=attrGroupService.getAttrGroupWithAttrsByCatelogId(catelogId);
+        return R.ok().put("data",vos);
+    }
 
     /**
      * 根据分组Id查询关联的基本属性
