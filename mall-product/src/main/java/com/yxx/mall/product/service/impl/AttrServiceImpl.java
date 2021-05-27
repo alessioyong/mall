@@ -264,4 +264,18 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper, AttrEntity> impleme
 
         return page;
     }
+
+
+    /**
+     * 根据分类ID查询销售属性
+     * @param catelogId
+     * @return
+     */
+    @Override
+    public List<AttrEntity> getSaleAttrByCatelogId(Long catelogId) {
+        List<AttrEntity> attrEntities = this.list(new QueryWrapper<AttrEntity>()
+                .eq("catelog_id", catelogId)
+                .eq("attr_type", ProductConstant.AttrTypeEnum.ATTR_SALE_TYPE.getCode()));
+        return attrEntities;
+    }
 }

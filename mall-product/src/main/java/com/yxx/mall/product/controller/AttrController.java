@@ -38,6 +38,19 @@ public class AttrController {
 
     }
 
+    /**
+     * 根据catelogId查询销售属性
+     * @param catelogId
+     * @return
+     */
+    @GetMapping("/sale/list/{catelogId}")
+    public R getSaleAttrs(@PathVariable("catelogId")Long catelogId){
+        List<AttrEntity> attrs=attrService.getSaleAttrByCatelogId(catelogId);
+        return R.ok().put("data",attrs);
+    }
+
+
+
     @PostMapping("/add")
     public R save(@RequestBody AttrVo attrVo){
         log.info("前端传入数据：{}",attrVo);

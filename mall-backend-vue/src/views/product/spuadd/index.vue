@@ -394,6 +394,8 @@ import CategoryCascader from "../../modules/commons/category-cascader";
 import BrandSelect from "../../modules/commons/brand-select";
 import MultiUpload from "@/components/upload/multiUpload";
 import { getAttrGroupWithAttrs } from "@/api/product/group";
+import { listSaleAttr } from "@/api/product/attr";
+import {listLevel} from "@/api/member/level"
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: { CategoryCascader, BrandSelect, MultiUpload },
@@ -516,7 +518,11 @@ export default {
     handlePriceChange(scope, mpidx, e) {
       this.spu.skus[scope.$index].memberPrice[mpidx].price = e;
     },
+    //会员等级列表
     getMemberLevels() {
+      listLevel({pageNum:1,pageSize:500}).then((res)=>{
+          this.dataResp.memberLevels = res.data.list;
+      })
       //   this.$http({
       //     url: this.$http.adornUrl("/member/memberlevel/list"),
       //     method: "get",
@@ -685,6 +691,19 @@ export default {
     getShowSaleAttr() {
       //获取当前分类可以使用的销售属性
       if (!this.dataResp.steped[1]) {
+        listSaleAttr(this.spu.catalogId).then((res) => {
+          this.dataResp.saleAttrs = res.data;
+          res.data.forEach((item) => {
+            this.dataResp.tempSaleAttrs.push({
+              attrId: item.attrId,
+              attrValues: [],
+              attrName: item.attrName,
+            });
+            this.inputVisible.push({ view: false });
+            this.inputValue.push({ val: "" });
+          });
+          this.dataResp.steped[1] = true;
+        });
         // this.$http({
         //   url: this.$http.adornUrl(
         //     `/product/attr/sale/list/${this.spu.catalogId}`
@@ -762,24 +781,25 @@ export default {
         type: "warning",
       })
         .then(() => {
-          this.$http({
-            url: this.$http.adornUrl("/product/spuinfo/save"),
-            method: "post",
-            data: this.$http.adornData(this.spu, false),
-          }).then(({ data }) => {
-            if (data.code == 0) {
-              this.$message({
-                type: "success",
-                message: "新增商品成功!",
-              });
-              this.step = 4;
-            } else {
-              this.$message({
-                type: "error",
-                message: "保存失败，原因【" + data.msg + "】",
-              });
-            }
-          });
+          // this.$http({
+          //   url: this.$http.adornUrl("/product/spuinfo/save"),
+          //   method: "post",
+          //   data: this.$http.adornData(this.spu, false),
+          // }).then(({ data }) => {
+          //   if (data.code == 0) {
+          //     this.$message({
+          //       type: "success",
+          //       message: "新增商品成功!",
+          //     });
+          //     this.step = 4;
+          //   } else {
+          //     this.$message({
+          //       type: "error",
+          //       message: "保存失败，原因【" + data.msg + "】",
+          //     });
+          //   }
+          // });
+
         })
         .catch((e) => {
           console.log(e);

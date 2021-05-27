@@ -8,7 +8,13 @@ export function listAttr(query,attrType) {
     params: query
   })
 }
-
+// 查询商品销售属性列表
+export function listSaleAttr(catelogId) {
+  return request({
+    url: '/product/attr/sale/list/'+catelogId,
+    method: 'get'
+  })
+}
 // 查询商品属性详细
 export function getAttr(attrId) {
   return request({
