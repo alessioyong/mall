@@ -396,6 +396,7 @@ import MultiUpload from "@/components/upload/multiUpload";
 import { getAttrGroupWithAttrs } from "@/api/product/group";
 import { listSaleAttr } from "@/api/product/attr";
 import {listLevel} from "@/api/member/level"
+import {addSpuInfo} from "@/api/product/spuinfo"
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: { CategoryCascader, BrandSelect, MultiUpload },
@@ -781,6 +782,14 @@ export default {
         type: "warning",
       })
         .then(() => {
+          addSpuInfo(this.spu).then((res)=>{
+            if(res.code==200){
+              this.msgSuccess("新增商品成功!")
+              this.step = 4;
+            }else{
+              this.msgError("保存失败，原因【" + res.msg + "】")
+            }
+          })
           // this.$http({
           //   url: this.$http.adornUrl("/product/spuinfo/save"),
           //   method: "post",
