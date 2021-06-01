@@ -15,6 +15,7 @@
       v-model="paths"
       :options="categorys"
       :props="setting"
+      size="small"
     ></el-cascader>
   </div>
 </template>

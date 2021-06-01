@@ -1,13 +1,13 @@
 package com.yxx.mall.product.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.yxx.mall.common.utils.R;
 import com.yxx.mall.product.service.SpuInfoService;
 import com.yxx.mall.product.vo.SpuSaveVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * @author xyong
@@ -21,10 +21,26 @@ public class SpuInfoController {
     SpuInfoService spuInfoService;
 
 
+    /**
+     * 新增商品信息
+     * @param vo
+     * @return
+     */
     @PostMapping("/save")
     public R save(@RequestBody SpuSaveVo vo){
         spuInfoService.saveSpuInfo(vo);
         return R.ok();
     }
 
+
+    /**
+     * 条件查询出商品信息
+     * @param params
+     * @return
+     */
+    @GetMapping("/list")
+    public R getSpuInfo(@RequestParam Map<String,Object> params){
+        PageInfo page=spuInfoService.getSpuInfoByCondition(params);
+        return R.ok().put("data",page);
+    }
 }

@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 新增品牌
+// 新增Spu信息
 export function addSpuInfo(data) {
     return request({
       url: '/product/spuinfo/save',
@@ -8,3 +8,11 @@ export function addSpuInfo(data) {
       data: data
     })
   }
+
+export function getSpuInfo(query){
+  return request({
+    url: '/product/spuinfo/list',
+    method: 'get',
+    params:query,
+  })
+}

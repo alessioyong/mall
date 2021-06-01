@@ -1,6 +1,9 @@
 package com.yxx.mall.product.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.yxx.mall.common.entity.product.*;
 import com.yxx.mall.common.to.SkuReductionTo;
 import com.yxx.mall.common.to.SpuBoundTo;
@@ -19,6 +22,7 @@ import org.springframework.util.StringUtils;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -170,5 +174,38 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfoEntity
     @Override
     public void saveBaseSpuInfo(SpuInfoEntity infoEntity) {
         this.baseMapper.insert(infoEntity);
+    }
+
+    /**
+     * 条件查询出商品信息
+     * @param params
+     * @return
+     */
+    @Override
+    public PageInfo getSpuInfoByCondition(Map<String, Object> params) {
+        QueryWrapper<SpuInfoEntity> wrapper = new QueryWrapper<>();
+        String key = (String) params.get("key");
+        if(!StringUtils.isEmpty(key)){
+            wrapper.and((w)->{
+                w.eq("id",key).or().like("spu_name",key);
+            });
+        }
+        String status = (String) params.get("status");
+        if(!StringUtils.isEmpty(status)){
+            wrapper.eq("publish_status",status);
+        }
+        String brandId = (String) params.get("brandId");
+        if(!StringUtils.isEmpty(brandId)){
+            wrapper.eq("brand_id",brandId);
+        }
+        String catelogId = (String) params.get("catelogId");
+        if(!StringUtils.isEmpty(catelogId)){
+            wrapper.eq("catalog_id",catelogId);
+        }
+        List<SpuInfoEntity> list = this.list(wrapper);
+        Integer pageNum =Integer.valueOf((String) params.get("pageNum"));
+        Integer pageSize =Integer.valueOf((String) params.get("pageSize"));
+        PageHelper.startPage(pageNum,pageSize);
+        return new PageInfo(list);
     }
 }

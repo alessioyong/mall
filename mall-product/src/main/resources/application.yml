@@ -12,6 +12,8 @@ spring:
     host: 47.112.242.184
     port: 6379
     password:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
 #mybatisPlus配置
 mybatis-plus:
   mapper-locations: classpath:mapper/**/*.xml
