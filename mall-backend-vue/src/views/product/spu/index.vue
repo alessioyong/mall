@@ -304,6 +304,7 @@ export default {
             let v = "";
             if (_this.spuAttrsMap["" + attr.attrId]) {
               v = _this.spuAttrsMap["" + attr.attrId].attrValue.split(";");
+              console.log("v===========>",v)
               if (v.length == 1) {
                 v = v[0] + "";
               }
@@ -323,8 +324,9 @@ export default {
       });
     },
     attrUpdateShow(row) {
-      this.dialogFormVisible = true;
+      
       this.clearData();
+      this.dialogFormVisible = true;
       this.spuId = row.id;
       this.catalogId = row.catalogId;
       if (this.spuId && this.catalogId) {
