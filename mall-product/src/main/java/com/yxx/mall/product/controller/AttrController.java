@@ -3,8 +3,10 @@ package com.yxx.mall.product.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yxx.mall.common.entity.product.AttrEntity;
+import com.yxx.mall.common.entity.product.ProductAttrValueEntity;
 import com.yxx.mall.common.utils.R;
 import com.yxx.mall.product.service.AttrService;
+import com.yxx.mall.product.service.ProductAttrValueService;
 import com.yxx.mall.product.vo.AttrRespVo;
 import com.yxx.mall.product.vo.AttrVo;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,9 @@ public class AttrController {
     @Autowired
     AttrService attrService;
 
+    @Autowired
+    ProductAttrValueService productAttrValueService;
+
     @GetMapping("/{type}/list")
     public R list(@RequestParam("pageNum") Integer pageNum,
                   @RequestParam("pageSize") Integer pageSize,
@@ -36,6 +41,12 @@ public class AttrController {
         PageInfo pageInfo=new PageInfo(list);
         return R.ok().put("data",pageInfo);
 
+    }
+
+    @GetMapping("/base/listforspu/{spuId}")
+    public R baseAttrlistforspu(@PathVariable("spuId") Long spuId){
+        List<ProductAttrValueEntity> entities = productAttrValueService.baseAttrlistforspu(spuId);
+        return R.ok().put("data",entities);
     }
 
     /**
@@ -80,6 +91,20 @@ public class AttrController {
         return R.ok();
     }
 
+    /**
+     * 修改规格参数
+     * @param spuId
+     * @param entities
+     * @return
+     */
+    @PutMapping("/update/{spuId}")
+    public R updateSpuAttr(@PathVariable("spuId") Long spuId,
+                           @RequestBody List<ProductAttrValueEntity> entities){
+
+        productAttrValueService.updateSpuAttr(spuId,entities);
+
+        return R.ok();
+    }
     /**
      * 批量删除规格参数
      * @param ids

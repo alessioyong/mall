@@ -48,3 +48,19 @@ export function delAttr(attrId) {
     method: 'delete'
   })
 }
+
+//
+export function attrlistforspu(spuId) {
+  return request({
+    url: '/product/attr/base/listforspu/' + spuId,
+    method: 'get'
+  })
+}
+//修改商品规格参数
+export function updateAttrBySpuId(data,spuId) {
+  return request({
+    url: '/product/attr/update/'+spuId,
+    method: 'put',
+    data: data
+  })
+}

@@ -98,8 +98,12 @@
       >
         <template slot-scope="scope">
           <el-tag v-if="scope.row.publishStatus == 0">新建</el-tag>
-          <el-tag v-if="scope.row.publishStatus == 1" type="success">已上架</el-tag>
-          <el-tag v-if="scope.row.publishStatus == 2" type="danger">已下架</el-tag>
+          <el-tag v-if="scope.row.publishStatus == 1" type="success"
+            >已上架</el-tag
+          >
+          <el-tag v-if="scope.row.publishStatus == 2" type="danger"
+            >已下架</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column
@@ -142,6 +146,57 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getDataList"
     />
+
+    <el-dialog title="修改规格" :visible.sync="dialogFormVisible">
+      <el-card class="box-card">
+        <el-tabs tab-position="left" style="width: 98%">
+          <el-tab-pane
+            :label="group.attrGroupName"
+            v-for="(group, gidx) in dataResp.attrGroups"
+            :key="group.attrGroupId"
+          >
+            <!-- 遍历属性,每个tab-pane对应一个表单，每个属性是一个表单项  spu.baseAttrs[0] = [{attrId:xx,val:}]-->
+            <el-form ref="form" :model="dataResp">
+              <el-form-item
+                :label="attr.attrName"
+                v-for="(attr, aidx) in group.attrs"
+                :key="attr.attrId"
+              >
+                <el-input
+                  v-model="dataResp.baseAttrs[gidx][aidx].attrId"
+                  type="hidden"
+                  v-show="false"
+                ></el-input>
+                <el-select
+                  v-model="dataResp.baseAttrs[gidx][aidx].attrValues"
+                  :multiple="attr.valueType == 1"
+                  filterable
+                  allow-create
+                  default-first-option
+                  placeholder="请选择或输入值"
+                >
+                  <el-option
+                    v-for="(val, vidx) in attr.valueSelect.split(';')"
+                    :key="vidx"
+                    :label="val"
+                    :value="val"
+                  ></el-option>
+                </el-select>
+                <el-checkbox
+                  v-model="dataResp.baseAttrs[gidx][aidx].showDesc"
+                  :true-label="1"
+                  :false-label="0"
+                  >快速展示</el-checkbox
+                >
+              </el-form-item>
+            </el-form>
+          </el-tab-pane>
+        </el-tabs>
+        <div style="margin: auto">
+          <el-button type="success" style="float: right" @click="submitSpuAttrs">确认修改</el-button>
+        </div>
+      </el-card>
+    </el-dialog>
   </div>
 </template>
 
@@ -149,6 +204,8 @@
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import { getSpuInfo, UpSpuInfo } from "@/api/product/spuinfo";
+import { getAttrGroupWithAttrs } from "@/api/product/group";
+import { attrlistforspu,updateAttrBySpuId } from "@/api/product/attr";
 import CategoryCascader from "../../modules/commons/category-cascader";
 import BrandSelect from "../../modules/commons/brand-select";
 // import Spuinfo from "./spuinfo";
@@ -159,6 +216,7 @@ export default {
   data() {
     //这里存放数据
     return {
+      dialogFormVisible: false,
       catId: 0,
       catelogPath: [],
       queryParams: {
@@ -179,6 +237,14 @@ export default {
       dataListLoading: false,
       dataListSelections: [],
       addOrUpdateVisible: false,
+      spuId: "",
+      catalogId: "",
+      dataResp: {
+        //后台返回的所有数据
+        attrGroups: [],
+        baseAttrs: [],
+      },
+      spuAttrsMap: {},
     };
   },
   //计算属性 类似于data概念
@@ -214,6 +280,100 @@ export default {
         this.getDataList();
         this.msgSuccess("操作成功！");
       });
+    },
+    clearData() {
+      this.dataResp.attrGroups = [];
+      this.dataResp.baseAttrs = [];
+      this.spuAttrsMap = {};
+    },
+    getSpuBaseAttrs() {
+      attrlistforspu(this.spuId).then((res) => {
+        res.data.forEach((item) => {
+          this.spuAttrsMap["" + item.attrId] = item;
+        });
+        console.log("~~~~", this.spuAttrsMap);
+      });
+    },
+    showBaseAttrs() {
+      let _this = this;
+      getAttrGroupWithAttrs(this.catalogId).then((data) => {
+        //先对表单的baseAttrs进行初始化
+        data.data.forEach((item) => {
+          let attrArray = [];
+          item.attrs.forEach((attr) => {
+            let v = "";
+            if (_this.spuAttrsMap["" + attr.attrId]) {
+              v = _this.spuAttrsMap["" + attr.attrId].attrValue.split(";");
+              if (v.length == 1) {
+                v = v[0] + "";
+              }
+            }
+            attrArray.push({
+              attrId: attr.attrId,
+              attrName: attr.attrName,
+              attrValues: v,
+              showDesc: _this.spuAttrsMap["" + attr.attrId]
+                ? _this.spuAttrsMap["" + attr.attrId].quickShow
+                : attr.showDesc,
+            });
+          });
+          this.dataResp.baseAttrs.push(attrArray);
+        });
+        this.dataResp.attrGroups = data.data;
+      });
+    },
+    attrUpdateShow(row) {
+      this.dialogFormVisible = true;
+      this.clearData();
+      this.spuId = row.id;
+      this.catalogId = row.catalogId;
+      if (this.spuId && this.catalogId) {
+        this.showBaseAttrs();
+        this.getSpuBaseAttrs();
+      }
+    },
+    submitSpuAttrs() {
+      console.log("·····", this.dataResp.baseAttrs);
+      //spu_id  attr_id  attr_name             attr_value             attr_sort  quick_show
+      let submitData = [];
+      this.dataResp.baseAttrs.forEach((item) => {
+        item.forEach((attr) => {
+          let val = "";
+          if (attr.attrValues instanceof Array) {
+            val = attr.attrValues.join(";");
+          } else {
+            val = attr.attrValues;
+          }
+
+          if (val != "") {
+            submitData.push({
+              attrId: attr.attrId,
+              attrName: attr.attrName,
+              attrValue: val,
+              quickShow: attr.showDesc,
+            });
+          }
+        });
+      });
+
+      this.$confirm("修改商品规格信息, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          updateAttrBySpuId(submitData,this.spuId).then((res)=>{
+            this.msgSuccess("属性修改成功!");
+            this.dialogFormVisible=false;
+            this.getDataList()
+          })
+        })
+        .catch((e) => {
+          this.$message({
+            type: "info",
+            message: "已取消修改" + e,
+          });
+        });      
     },
     // 多选
     selectionChangeHandle(val) {
