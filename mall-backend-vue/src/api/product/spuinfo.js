@@ -16,3 +16,10 @@ export function getSpuInfo(query){
     params:query,
   })
 }
+
+export function UpSpuInfo(id){
+  return request({
+    url: '/product/spuinfo/up/'+id,
+    method: 'put',
+  })
+}

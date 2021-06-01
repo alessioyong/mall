@@ -1,6 +1,8 @@
 package com.yxx.mall.product.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.yxx.mall.common.constant.ProductConstant;
+import com.yxx.mall.common.entity.product.SpuInfoEntity;
 import com.yxx.mall.common.utils.R;
 import com.yxx.mall.product.service.SpuInfoService;
 import com.yxx.mall.product.vo.SpuSaveVo;
@@ -42,5 +44,14 @@ public class SpuInfoController {
     public R getSpuInfo(@RequestParam Map<String,Object> params){
         PageInfo page=spuInfoService.getSpuInfoByCondition(params);
         return R.ok().put("data",page);
+    }
+
+    @PutMapping("/up/{id}")
+    public R upSpu(@PathVariable("id") Long id){
+        SpuInfoEntity spuInfo = new SpuInfoEntity();
+        spuInfo.setId(id);
+        spuInfo.setPublishStatus(ProductConstant.PublishStatusEnum.PUBLISH_UP.getCode());
+        spuInfoService.updateById(spuInfo);
+        return R.ok();
     }
 }

@@ -98,8 +98,8 @@
       >
         <template slot-scope="scope">
           <el-tag v-if="scope.row.publishStatus == 0">新建</el-tag>
-          <el-tag v-if="scope.row.publishStatus == 1">已上架</el-tag>
-          <el-tag v-if="scope.row.publishStatus == 2">已下架</el-tag>
+          <el-tag v-if="scope.row.publishStatus == 1" type="success">已上架</el-tag>
+          <el-tag v-if="scope.row.publishStatus == 2" type="danger">已下架</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -148,7 +148,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import { getSpuInfo } from "@/api/product/spuinfo";
+import { getSpuInfo, UpSpuInfo } from "@/api/product/spuinfo";
 import CategoryCascader from "../../modules/commons/category-cascader";
 import BrandSelect from "../../modules/commons/brand-select";
 // import Spuinfo from "./spuinfo";
@@ -206,6 +206,13 @@ export default {
         this.dataList = res.data.list;
         this.total = res.data.total;
         this.dataListLoading = false;
+      });
+    },
+
+    productUp(id) {
+      UpSpuInfo(id).then((res) => {
+        this.getDataList();
+        this.msgSuccess("操作成功！");
       });
     },
     // 多选
