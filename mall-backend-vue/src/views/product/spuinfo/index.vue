@@ -41,6 +41,9 @@
           <el-button type="primary" size="mini" @click="searchSkuInfo"
             >查询</el-button
           >
+          <el-button  size="mini" @click="resetSkuInfo"
+            >重置</el-button
+          >
         </el-form-item>
       </el-form>
     </el-form>
@@ -226,6 +229,14 @@ export default {
       }
     },
     searchSkuInfo() {
+      this.getDataList();
+    },
+    resetSkuInfo(){
+      this.dataForm.key=undefined;
+      this.dataForm.catelogId=undefined;
+      this.dataForm.brandId=undefined;
+      this.dataForm.price.min=undefined;
+      this.dataForm.price.max=undefined;
       this.getDataList();
     },
     // 获取数据列表
