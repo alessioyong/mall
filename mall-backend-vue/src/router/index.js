@@ -35,7 +35,12 @@ export const constantRoutes = [
       {
         path: '/redirect/:path(.*)',
         component: (resolve) => require(['@/views/redirect'], resolve)
-      }
+      },
+      {
+        path: '/ware-sku',
+        component: (resolve) => require(['@/views/ware/waresku/index'], resolve),
+        hidden: true
+      },
     ]
   },
   {
@@ -43,6 +48,7 @@ export const constantRoutes = [
     component: (resolve) => require(['@/views/login'], resolve),
     hidden: true
   },
+  
   {
     path: '/404',
     component: (resolve) => require(['@/views/error/404'], resolve),
