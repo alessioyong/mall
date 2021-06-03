@@ -17,21 +17,28 @@ spring:
             - Path=/api/system/**
           filters:
             - StripPrefix=1
-
+        #商品模块
         - id: mall-product-route
           uri: lb://mall-product
           predicates:
             - Path=/api/product/**
           filters:
             - StripPrefix=1
-
+        #会员模块
         - id: mall-member-route
           uri: lb://mall-member
           predicates:
             - Path=/api/member/**
           filters:
             - StripPrefix=1
-
+        #仓储模块
+        - id: mall-ware-route
+          uri: lb://mall-ware
+          predicates:
+            - Path=/api/ware/**
+          filters:
+            - StripPrefix=1
+        #第三方服务模块
         - id: third-party-route
           uri: lb://mall-third-party
           predicates:
