@@ -92,8 +92,20 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['ware:detail:export']"
-          >导出</el-button
+          > 导出</el-button
         >
+      </el-col>
+      <el-col :span="1.5">
+        <el-dropdown @command="handleBatchCommand" :disabled="dataListSelections.length <= 0">
+          <el-button type="danger" size="mini">
+            批量操作
+            <i class="el-icon-arrow-down el-icon--right"></i>
+          </el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="delete">批量删除</el-dropdown-item>
+            <el-dropdown-item command="merge">合并整单</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </el-col>
       <right-toolbar
         :showSearch.sync="showSearch"
@@ -108,7 +120,7 @@
     >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column
-        label="状态[0新建，1已分配，2正在采购，3已完成，4采购失败]"
+        label="id"
         align="center"
         prop="id"
       />
@@ -117,11 +129,15 @@
       <el-table-column label="采购数量" align="center" prop="skuNum" />
       <el-table-column label="采购金额" align="center" prop="skuPrice" />
       <el-table-column label="仓库id" align="center" prop="wareId" />
-      <el-table-column
-        label="状态[0新建，1已分配，2正在采购，3已完成，4采购失败]"
-        align="center"
-        prop="status"
-      />
+     <el-table-column prop="status" header-align="center" align="center" label="状态">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.status==0">新建</el-tag>
+          <el-tag type="info" v-if="scope.row.status==1">已分配</el-tag>
+          <el-tag type="wanring" v-if="scope.row.status==2">正在采购</el-tag>
+          <el-tag type="success" v-if="scope.row.status==3">已完成</el-tag>
+          <el-tag type="danger" v-if="scope.row.status==4">采购失败</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column
         label="操作"
         align="center"
@@ -207,6 +223,7 @@ export default {
   components: {},
   data() {
     return {
+      dataListSelections: [],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -249,6 +266,7 @@ export default {
     this.getWareInfo();
   },
   methods: {
+    handleBatchCommand(){},
     getWareInfo() {
       let params = {
         pageNum: 1,
@@ -262,8 +280,8 @@ export default {
     getList() {
       this.loading = true;
       listDetail(this.queryParams).then((response) => {
-        this.detailList = response.rows;
-        this.total = response.total;
+        this.detailList = response.data.list;
+        this.total = response.data.total;
         this.loading = false;
       });
     },
@@ -292,7 +310,9 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.resetForm("queryForm");
+      this.queryParams.status=null;
+      this.queryParams.wareId=null;
+      this.queryParams.key=null;
       this.handleQuery();
     },
     // 多选框选中数据
