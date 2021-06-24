@@ -96,7 +96,7 @@
         >
       </el-col>
       <el-col :span="1.5">
-        <el-dropdown @command="handleBatchCommand" :disabled="dataListSelections.length <= 0">
+        <el-dropdown @command="handleBatchCommand" :disabled="ids.length <= 0">
           <el-button type="danger" size="mini">
             批量操作
             <i class="el-icon-arrow-down el-icon--right"></i>
@@ -205,6 +205,28 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+
+    <el-dialog title="合并到整单" :visible.sync="mergedialogVisible">
+      <!-- id  assignee_id  assignee_name  phone   priority status -->
+      <el-select v-model="purchaseId" placeholder="请选择" clearable filterable>
+        <el-option
+          v-for="item in purchasetableData"
+          :key="item.id"
+          :label="item.id"
+          :value="item.id"
+        >
+          <span style="float: left">{{ item.id }}</span>
+          <span
+            style="float: right; color: #8492a6; font-size: 13px"
+          >{{ item.assigneeName }}：{{item.phone}}</span>
+        </el-option>
+      </el-select>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="mergedialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="mergeItem">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -223,6 +245,9 @@ export default {
   components: {},
   data() {
     return {
+      purchasetableData: [],
+      purchaseId: "",
+      mergedialogVisible: false,
       dataListSelections: [],
       // 遮罩层
       loading: true,
@@ -266,7 +291,22 @@ export default {
     this.getWareInfo();
   },
   methods: {
-    handleBatchCommand(){},
+    handleBatchCommand(cmd){
+      if (cmd == "delete") {
+        //this.deleteHandle();
+      }
+      if (cmd == "merge") {
+        if (this.ids.length != 0) {
+          //this.getUnreceivedPurchase();
+          this.mergedialogVisible = true;
+        } else {
+          this.$alert("请先选择需要合并的需求", "提示", {
+            confirmButtonText: "确定",
+            callback: action => {}
+          });
+        }
+      }
+    },
     getWareInfo() {
       let params = {
         pageNum: 1,
