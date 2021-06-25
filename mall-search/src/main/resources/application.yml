@@ -1,0 +1,4 @@
+es:
+  hostname: 47.112.242.184
+  port: 9200
+  scheme: http
