@@ -278,4 +278,14 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper, AttrEntity> impleme
                 .eq("attr_type", ProductConstant.AttrTypeEnum.ATTR_SALE_TYPE.getCode()));
         return attrEntities;
     }
+
+    /**
+     * 在指定的所有属性中可搜索的
+     * @param attrIds
+     * @return
+     */
+    @Override
+    public List<Long> selectSearchAttrIds(List<Long> attrIds) {
+        return baseMapper.selectSearchAttrIds(attrIds);
+    }
 }

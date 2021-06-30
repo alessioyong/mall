@@ -4,10 +4,12 @@ import com.github.pagehelper.PageInfo;
 import com.yxx.mall.common.entity.ware.WareSkuEntity;
 import com.yxx.mall.common.utils.R;
 import com.yxx.mall.ware.service.WareSkuService;
+import com.yxx.mall.ware.vo.SkuHasStockVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,6 +22,15 @@ public class WareSkuController {
 
     @Autowired
     private WareSkuService wareSkuService;
+
+
+    @PostMapping("/hasstock")
+    public R<List<SkuHasStockVo>> getSkusHasStock(@RequestBody List<Long> skuIds){
+        List<SkuHasStockVo> vos=wareSkuService.getSkusHasStock(skuIds);
+        R<List<SkuHasStockVo>> ok = R.ok();
+        ok.setData(vos);
+        return ok;
+    }
 
     /**
      * 查询商品库存信息

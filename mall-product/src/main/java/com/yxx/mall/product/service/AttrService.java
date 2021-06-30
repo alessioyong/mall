@@ -28,4 +28,6 @@ public interface AttrService extends IService<AttrEntity> {
     PageInfo getNoRelationAttr(Map<String, Object> params, Long attrgroupId);
 
     List<AttrEntity> getSaleAttrByCatelogId(Long catelogId);
+
+    List<Long> selectSearchAttrIds(List<Long> attrIds);
 }

@@ -7,8 +7,10 @@ import com.github.pagehelper.PageInfo;
 import com.yxx.mall.common.entity.product.*;
 import com.yxx.mall.common.to.SkuReductionTo;
 import com.yxx.mall.common.to.SpuBoundTo;
+import com.yxx.mall.common.to.es.SkuEsModel;
 import com.yxx.mall.common.utils.R;
 import com.yxx.mall.product.fegin.CouponFeginService;
+import com.yxx.mall.product.fegin.WareFeignService;
 import com.yxx.mall.product.mapper.SpuInfoMapper;
 import com.yxx.mall.product.service.*;
 import com.yxx.mall.product.vo.*;
@@ -20,9 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -56,6 +56,14 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfoEntity
     @Autowired
     CouponFeginService couponFeginService;
 
+    @Autowired
+    BrandService brandService;
+
+    @Autowired
+    CategoryService categoryService;
+
+    @Autowired
+    WareFeignService wareFeignService;
     /**
      * 商品信息保存
      * //TODO 待完善
@@ -207,5 +215,77 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfoEntity
         Integer pageSize =Integer.valueOf((String) params.get("pageSize"));
         PageHelper.startPage(pageNum,pageSize);
         return new PageInfo(list);
+    }
+
+    /**
+     * 商品上架
+     * @param spuId
+     */
+    @Override
+    public void up(Long spuId) {
+        //1.查询出当前spuid对应下的所有sku信息，品牌的名字
+        List<SkuInfoEntity> skus=skuInfoService.getSkusBySpuId(spuId);
+        List<Long> skuIds = skus.stream().map(sku -> {
+            return sku.getSkuId();
+        }).collect(Collectors.toList());
+
+        //TODO 4.查询当前sku所有可以用来检索的规格属性
+        List<ProductAttrValueEntity> baseAttrs = attrValueService.baseAttrlistforspu(spuId);
+        List<Long> attrIds = baseAttrs.stream().map(attr -> {
+            return attr.getAttrId();
+        }).collect(Collectors.toList());
+
+        List<Long> searchAttrIds=attrService.selectSearchAttrIds(attrIds);
+        Set<Long> idSet=new HashSet<>(searchAttrIds);
+        List<SkuEsModel.Attr> attrList = baseAttrs.stream().filter(item -> {
+            return idSet.contains(item.getAttrId());
+        }).map(item -> {
+            SkuEsModel.Attr attr = new SkuEsModel.Attr();
+            BeanUtils.copyProperties(item, attr);
+            return attr;
+        }).collect(Collectors.toList());
+        //TODO 1.发送远程调用，库存系统查询是否有库存
+        Map<Long, Boolean> stockMap=null;
+        try {
+            R<List<SkuHasStockVo>> skusHasStock = wareFeignService.getSkusHasStock(skuIds);
+            stockMap = skusHasStock.getData().stream().collect(Collectors.toMap(SkuHasStockVo::getSkuId, item -> item.getHasStock()));
+        }catch (Exception e){
+            log.error("库存服务查询异常：",e);
+        }
+
+        //封装每个sku的信息
+        Map<Long, Boolean> finalStockMap = stockMap;
+        List<SkuEsModel> collect = skus.stream().map(sku -> {
+            //组装需要的数据
+            SkuEsModel esModel = new SkuEsModel();
+            BeanUtils.copyProperties(sku,esModel);
+            esModel.setSkuPrice(sku.getPrice());
+            esModel.setSkuImg(sku.getSkuDefaultImg());
+
+            if(finalStockMap ==null){
+                esModel.setHasStock(true);
+            }else {
+                esModel.setHasStock(finalStockMap.get(sku.getSkuId()));
+            }
+
+
+
+
+            //TODO 2.热度评分。 0，
+            esModel.setHotScore(0L);
+            //TODO 3.查询品牌和分类的名字信息
+            BrandEntity brand = brandService.getById(esModel.getBrandId());
+            esModel.setBrandName(brand.getName());
+            esModel.setBrandImg(brand.getLogo());
+
+            CategoryEntity category = categoryService.getById(esModel.getCatalogId());
+            esModel.setCatalogName(category.getName());
+            //设置检索属性
+            esModel.setAttrs(attrList);
+
+
+            return esModel;
+        }).collect(Collectors.toList());
+        //TODO 5.将数据发给ES进行保存 ：mall-search
     }
 }

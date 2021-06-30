@@ -8,10 +8,12 @@ import com.yxx.mall.common.entity.ware.WareSkuEntity;
 import com.yxx.mall.common.utils.StringUtils;
 import com.yxx.mall.ware.mapper.WareSkuMapper;
 import com.yxx.mall.ware.service.WareSkuService;
+import com.yxx.mall.ware.vo.SkuHasStockVo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author xyong
@@ -36,5 +38,19 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuMapper, WareSkuEntity
         PageHelper.startPage(pageNum,pageSize);
         List<WareSkuEntity> list = this.list(wrapper);
         return new PageInfo(list);
+    }
+
+    @Override
+    public List<SkuHasStockVo> getSkusHasStock(List<Long> skuIds) {
+        List<SkuHasStockVo> collect = skuIds.stream().map(skuId -> {
+            SkuHasStockVo vo = new SkuHasStockVo();
+            //查询当前sku的总库存量
+            long count=baseMapper.getSkuStock(skuId);
+            vo.setSkuId(skuId);
+            vo.setHasStock(count>0);
+            return vo;
+        }).collect(Collectors.toList());
+
+        return collect;
     }
 }
