@@ -33,7 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
     <select id="getSkuStock" resultType="java.lang.Long">
-        select sum(stock-stock_locked) from 'wms_ware_sku' where sku_id=#{skuId}
+        select sum(stock-stock_locked) from wms_ware_sku where sku_id=#{skuId}
     </select>
 
     <insert id="insertWareSku" parameterType="com.yxx.mall.common.entity.ware.WareSkuEntity" useGeneratedKeys="true" keyProperty="id">
