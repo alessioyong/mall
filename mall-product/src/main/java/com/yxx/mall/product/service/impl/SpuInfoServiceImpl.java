@@ -1,15 +1,18 @@
 package com.yxx.mall.product.service.impl;
 
+import com.alibaba.fastjson.TypeReference;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yxx.mall.common.constant.ProductConstant;
 import com.yxx.mall.common.entity.product.*;
 import com.yxx.mall.common.to.SkuReductionTo;
 import com.yxx.mall.common.to.SpuBoundTo;
 import com.yxx.mall.common.to.es.SkuEsModel;
 import com.yxx.mall.common.utils.R;
 import com.yxx.mall.product.fegin.CouponFeginService;
+import com.yxx.mall.product.fegin.SearchFeignService;
 import com.yxx.mall.product.fegin.WareFeignService;
 import com.yxx.mall.product.mapper.SpuInfoMapper;
 import com.yxx.mall.product.service.*;
@@ -64,6 +67,9 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfoEntity
 
     @Autowired
     WareFeignService wareFeignService;
+
+    @Autowired
+    SearchFeignService searchFeignService;
     /**
      * 商品信息保存
      * //TODO 待完善
@@ -247,15 +253,17 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfoEntity
         //TODO 1.发送远程调用，库存系统查询是否有库存
         Map<Long, Boolean> stockMap=null;
         try {
-            R<List<SkuHasStockVo>> skusHasStock = wareFeignService.getSkusHasStock(skuIds);
-            stockMap = skusHasStock.getData().stream().collect(Collectors.toMap(SkuHasStockVo::getSkuId, item -> item.getHasStock()));
+            R r = wareFeignService.getSkusHasStock(skuIds);
+            TypeReference<List<SkuHasStockVo>> typeReference = new TypeReference<List<SkuHasStockVo>>() {
+            };
+            stockMap = r.getData(typeReference).stream().collect(Collectors.toMap(SkuHasStockVo::getSkuId, item -> item.getHasStock()));
         }catch (Exception e){
             log.error("库存服务查询异常：",e);
         }
 
         //封装每个sku的信息
         Map<Long, Boolean> finalStockMap = stockMap;
-        List<SkuEsModel> collect = skus.stream().map(sku -> {
+        List<SkuEsModel> upProducts = skus.stream().map(sku -> {
             //组装需要的数据
             SkuEsModel esModel = new SkuEsModel();
             BeanUtils.copyProperties(sku,esModel);
@@ -287,5 +295,17 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfoEntity
             return esModel;
         }).collect(Collectors.toList());
         //TODO 5.将数据发给ES进行保存 ：mall-search
+
+        R r = searchFeignService.productStatusUp(upProducts);
+        if(r.getCode().equals(HttpStatus.SC_OK)){
+            //调用成功
+            //TODO 6.修改当前spu状态
+            baseMapper.updateSpuStatus(spuId, ProductConstant.PublishStatusEnum.PUBLISH_UP.getCode());
+        }else {
+            //调用失败
+            //TODO 7.重复调用？接口幂
+
+        }
+
     }
 }

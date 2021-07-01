@@ -40,7 +40,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where attr_id = #{attrId}
     </select>
     <select id="selectSearchAttrIds" resultType="java.lang.Long">
-        SELECT attr_id FROM 'pms_attr' WHERE attr_id IN
+        SELECT attr_id FROM pms_attr WHERE attr_id IN
          <foreach collection="attrIds" item="id" separator="," open="(" close=")">
              #{id}
          </foreach>
