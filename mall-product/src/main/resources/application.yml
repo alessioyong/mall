@@ -14,6 +14,8 @@ spring:
     password:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
+  thymeleaf:
+    cache: false #关闭缓存
 #mybatisPlus配置
 mybatis-plus:
   mapper-locations: classpath:mapper/**/*.xml
@@ -25,3 +27,4 @@ mybatis-plus:
 logging:
   level:
     com.yxx.mall: debug
+

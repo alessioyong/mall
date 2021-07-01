@@ -2,8 +2,10 @@ package com.yxx.mall.product.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yxx.mall.common.entity.product.CategoryEntity;
+import com.yxx.mall.product.vo.Catelog2Vo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 商品三级分类
@@ -22,5 +24,9 @@ public interface CategoryService extends IService<CategoryEntity> {
     Long[] findCatelogPath(Long catelogId);
 
     void updateCasecade(CategoryEntity category);
+
+    List<CategoryEntity> getLevelOneCategorys();
+
+    Map<String, List<Catelog2Vo>> getCatalogJson();
 }
 
