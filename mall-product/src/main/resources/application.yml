@@ -26,5 +26,6 @@ mybatis-plus:
       logic-not-delete-value: 0 #代表未删除
 logging:
   level:
-    com.yxx.mall: debug
+    com.yxx.mall: error
+
 
