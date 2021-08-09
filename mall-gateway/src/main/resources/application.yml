@@ -45,6 +45,12 @@ spring:
             - Path=/api/thirdparty/**
           filters:
             - StripPrefix=1
+
+        - id: mall_host_route
+          uri: lb://mall-product
+          predicates:
+            - Host=**.mall.com
+
     nacos:
       discovery:
         server-addr: 47.112.242.184:8848

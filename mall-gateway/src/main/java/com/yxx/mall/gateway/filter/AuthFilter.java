@@ -2,9 +2,7 @@ package com.yxx.mall.gateway.filter;
 
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.yxx.mall.common.utils.R;
-import com.yxx.mall.common.utils.ServletUtils;
 import com.yxx.mall.common.utils.StringUtils;
 import com.yxx.mall.common.utils.constant.CacheConstants;
 import com.yxx.mall.common.utils.constant.Constants;
@@ -47,7 +45,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
     private RedisService redisService;
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        String url = exchange.getRequest().getURI().getPath();
+        /*String url = exchange.getRequest().getURI().getPath();
         // 跳过不需要验证的路径
         if (StringUtils.matches(url, ignoreWhite.getWhites()))
         {
@@ -78,7 +76,9 @@ public class AuthFilter implements GlobalFilter, Ordered {
                 .header(CacheConstants.DETAILS_USERNAME, ServletUtils.urlEncode(username)).build();
         ServerWebExchange mutableExchange = exchange.mutate().request(mutableReq).build();
 
-        return chain.filter(mutableExchange);
+        return chain.filter(mutableExchange);*/
+
+        return chain.filter(exchange);
     }
 
     private Mono<Void> setUnauthorizedResponse(ServerWebExchange exchange, String msg)
