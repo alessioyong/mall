@@ -5,17 +5,24 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://47.112.242.184:3306/mall_pms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+      url: jdbc:mysql://139.9.65.255:3306/mall_pms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
       username: root
       password: root
   redis:
-    host: 47.112.242.184
+    host: 139.9.65.255
     port: 6379
     password:
+    timeout: 1000
+    jedis:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+        max-wait: -1
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
   thymeleaf:
-    cache: false #关闭缓存
+    cache: true #关闭缓存
 #mybatisPlus配置
 mybatis-plus:
   mapper-locations: classpath:mapper/**/*.xml

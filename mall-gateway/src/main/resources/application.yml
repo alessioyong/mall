@@ -1,6 +1,6 @@
 spring:
   redis:
-    host: 47.112.242.184
+    host: 139.9.65.255
     port: 6379
     password:
   cloud:
@@ -53,7 +53,7 @@ spring:
 
     nacos:
       discovery:
-        server-addr: 47.112.242.184:8848
+        server-addr: 139.9.65.255:8848
 
 #白名单
 ignore:

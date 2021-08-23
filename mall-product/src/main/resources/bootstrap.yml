@@ -7,4 +7,4 @@ spring:
   #nacos 注册中心
   cloud:
     nacos:
-      server-addr: 47.112.242.184:8848
+      server-addr: 139.9.65.255:8848
