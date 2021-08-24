@@ -15,6 +15,7 @@ import com.yxx.mall.product.vo.Catelog2Vo;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
@@ -121,6 +122,8 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
      *
      * @return
      */
+    //每一个需要缓存的数据我们都来指定放到那个名字的缓存【缓存的分区（按照业务类型分）】
+    @Cacheable(value = {"category"},key = "'levelOneCategorys'") //代表当前方法的结果需要缓存，如果缓存中有，方法不调用，如果没有会调用方法，最后将结果放入缓存
     @Override
     public List<CategoryEntity> getLevelOneCategorys() {
         long l = System.currentTimeMillis();
