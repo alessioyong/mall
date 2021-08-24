@@ -12,6 +12,8 @@ import com.yxx.mall.product.mapper.CategoryMapper;
 import com.yxx.mall.product.service.CategoryBrandRealtionService;
 import com.yxx.mall.product.service.CategoryService;
 import com.yxx.mall.product.vo.Catelog2Vo;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
@@ -38,6 +40,9 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
 
     @Autowired
     StringRedisTemplate redisTemplate;
+
+    @Autowired
+    RedissonClient redisson;
 
     @Override
     public List<CategoryEntity> listWithTree() {
@@ -139,7 +144,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
         String catalogJSON = redisTemplate.opsForValue().get("catalogJSON");
         if (StringUtils.isEmpty(catalogJSON)) {
             //2.缓存中没有 ，查询数据库
-            Map<String, List<Catelog2Vo>> catalogJsonFromDb = getCatalogJsonFromDbWithRedisLock();
+            Map<String, List<Catelog2Vo>> catalogJsonFromDb = getCatalogJsonFromDbWithRedissonLock();
             return catalogJsonFromDb;
         }
         Map<String, List<Catelog2Vo>> result = JSON.parseObject(catalogJSON, new TypeReference<Map<String, List<Catelog2Vo>>>() {
@@ -160,19 +165,42 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
 
     }
 
+    /**
+     * 缓存里的数据如何和数据库中保持一致
+     * 1）双写模式
+     * 2）失效模式
+     * @return
+     */
+    public Map<String, List<Catelog2Vo>> getCatalogJsonFromDbWithRedissonLock() {
+        //1.锁的名字，锁的粒度，越细越快
+        RLock lock = redisson.getLock("catalogJson-lock");
+        lock.lock();
+        Map<String, List<Catelog2Vo>> dataFromDb;
+        try {
+            //加锁成功
+            dataFromDb = getDataFromDb();
+        } finally {
+            lock.unlock();
+        }
+
+        return dataFromDb;
+
+
+    }
+
     public Map<String, List<Catelog2Vo>> getCatalogJsonFromDbWithRedisLock() {
         //1.占分布式锁。去redis占坑//2.设置过期时间,必须是原子的
         String uuid = UUID.randomUUID().toString();
-        Boolean lock = redisTemplate.opsForValue().setIfAbsent("lock", uuid,300,TimeUnit.SECONDS);
-        if(lock){
+        Boolean lock = redisTemplate.opsForValue().setIfAbsent("lock", uuid, 300, TimeUnit.SECONDS);
+        if (lock) {
             System.out.println("获得分布式锁成功。");
             Map<String, List<Catelog2Vo>> dataFromDb;
             try {
                 //加锁成功
                 dataFromDb = getDataFromDb();
-            }finally {
+            } finally {
                 //获取锁+删除所=原子操作 luo脚本解锁
-                String scrip="if redis.call(\"get\",KEYS[1]) == ARGV[1] \n" +
+                String scrip = "if redis.call(\"get\",KEYS[1]) == ARGV[1] \n" +
                         "then\n" +
                         "\treturn redis.call(\"del\",KEYS[1])\n" +
                         "else\n" +
@@ -189,7 +217,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
                 redisTemplate.delete("lock"); //删除锁
             }*/
             return dataFromDb;
-        }else {
+        } else {
             //加锁失败。。。重试
             System.out.println("获得分布式锁失败...等待重试");
             try {
